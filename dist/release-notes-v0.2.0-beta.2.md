@@ -1,62 +1,42 @@
 # SiriRemoteForge v0.2.0-beta.2
 
-This beta makes the Settings GUI safer and much faster to configure: every save now has visible
-feedback, and shortcut actions can be recorded directly from the physical keyboard instead of
-being typed as configuration tokens.
+本版让设置界面更安全、快捷：每次保存都有明确状态，快捷键动作可以直接通过实体键盘录入，不必手工填写配置标记。
 
-## Choose one download
+## 选择一个下载包
 
-- **App only:** `HyperVibe-0.2.0-beta.2-macOS-arm64.zip`
-  Unzip it, move `HyperVibe.app` to Applications, then right-click → **Open** once.
-- **Full Setup (advanced):** `HyperVibe-Full-Setup-0.2.0-beta.2-arm64.zip`
-  Includes HyperVibe, Siri Remote Mic, the on-demand voice-capture service, and
-  `HyperVibe Uninstall.app`. Installation asks for an administrator password, briefly restarts
-  system audio, and verifies `coreaudiod` with automatic plug-in rollback.
+- **仅应用：** `HyperVibe-0.2.0-beta.2-macOS-arm64.zip`。解压后将 `HyperVibe.app` 移至“应用程序”，然后右键点按并选择一次“打开”。
+- **完整安装（进阶）：** `HyperVibe-Full-Setup-0.2.0-beta.2-arm64.zip`。包含 HyperVibe、Siri Remote Mic、按需语音采集服务和 `HyperVibe Uninstall.app`。安装需管理员授权，会短暂重启系统音频，并通过 `coreaudiod` 检查及自动回滚验证插件。
 
-Both builds are ad-hoc signed and not Apple-notarized. They require macOS 13 or newer on Apple
-silicon and a third-generation USB-C Siri Remote.
+两个版本均为 ad-hoc 签名，未经 Apple 公证。需要 macOS 13 或更高版本、Apple 芯片和第三代 USB-C Siri Remote。
 
-## Highlights
+## 主要变化
 
-### Record shortcuts from the keyboard
+### 直接用键盘录入快捷键
 
-- Keystroke, Push-to-talk, and Repeat Key actions now use a native macOS shortcut recorder.
-- Click the field and press the intended combination; the normalized shortcut is saved immediately.
-- Preserves left/right Command, Control, Option, and Shift so side-sensitive hyperkeys still work.
-- Supports standalone modifier chords, **Fn**, Fn combinations, navigation keys, punctuation,
-  Forward Delete, Help, and F1–F20.
-- Escape cancels recording, an unmodified Delete clears it, and the pencil button opens an advanced
-  text fallback for pasting or manually editing a chord.
+- Keystroke、Push-to-talk 和 Repeat Key 动作现在使用原生 macOS 快捷键录制器。点按输入框并按下组合键，即可立即保存标准化快捷键。
+- 保留左右 Command、Control、Option、Shift 的区别，支持单独修饰键、修饰键组合、Fn、Fn 组合、导航键、标点、Forward Delete、Help 和 F1–F20。
+- Escape 取消录制；单独按 Delete 可清除内容；铅笔按钮可切换到高级文本输入，以粘贴或编辑组合键。
 
-### Know when configuration is saved
+### 清楚显示配置保存状态
 
-- The Settings header now reports **Saving…**, **Auto-saved**, or **Save failed** across both tabs.
-- Failed saves stay visible and expose the exact error when clicked.
-- Tuning remains live and uses its existing short debounce; Layout changes save when the control
-  commits. Both continue to write the single `config.jsonc` source of truth atomically.
-- Invalid existing JSONC is never overwritten, and the GUI now explains why the save was refused.
+- 设置页标题栏显示“正在保存… / 已自动保存 / 保存失败”；点击失败状态可查看具体错误。
+- Tuning 页仍采用短暂防抖并实时生效，Layout 页在控件提交后保存；两者都以 `config.jsonc` 为唯一事实来源并原子写入。
+- 现有 JSONC 无效时不会被覆盖，界面会说明拒绝保存的原因。
 
-## Microphone note
+## 麦克风说明
 
-Remote Bluetooth voice capture additionally needs Apple's PacketLogger from
-[*Additional Tools for Xcode*](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode).
-PacketLogger is not bundled. The main app and built-in-microphone fallback remain usable without it.
+遥控器蓝牙语音采集还需要从 [Xcode Additional Tools](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode) 获取 Apple 的 PacketLogger。项目不附带 PacketLogger；没有它时，主应用和内置麦克风回退仍可使用。
 
-## Verification
+## 验证与下载校验
 
-- 124 SiriRemoteCore tests passed, including shortcut normalization and physical Fn capture.
-- The complete arm64 macOS app build passed.
-- The native AppKit recorder bridge passed synthetic `NSEvent` tests for ordinary chords,
-  side-specific modifiers, Fn + F12, standalone Fn, cancellation, and clearing.
-- Release archives are checksum-verified, signature-verified, architecture-audited, and scanned for
-  private paths, device identifiers, personal configuration, PacketLogger, and production media.
+- SiriRemoteCore 的 124 项测试通过，包含快捷键规范化和实体 Fn 键录入。
+- arm64 macOS 应用构建通过；原生 AppKit 录制器桥接通过合成 `NSEvent` 测试，覆盖普通组合键、左右修饰键、Fn+F12、单独 Fn、取消和清除。
+- 发布包已校验校验和、签名和架构，并检查是否包含私有路径、设备标识、个人配置、PacketLogger 或正式媒体素材。
 
-Use the attached `SHA256SUMS.txt` to verify the downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware, and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。

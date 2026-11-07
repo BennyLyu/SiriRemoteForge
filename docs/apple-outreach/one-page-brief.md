@@ -1,60 +1,38 @@
 # HyperVibe
 
-## Complete one-handed control for macOS, using Siri Remote
+## 用 Siri Remote 实现完整的单手 macOS 控制
 
-HyperVibe is a working public macOS proof of concept. It combines pointing, scrolling, clicking,
-dragging, contextual commands, and voice in one compact controller - with every action visible and
-every mapping configurable.
+HyperVibe 是一个已公开运行的 macOS 概念验证。它把指针、滚动、点击、拖动、上下文命令和语音整合到一台精巧的控制器中；每种操作都可见，每个映射都可配置。
 
-### The gap
+### 现有缺口
 
-Voice can create a prompt, but it cannot finish the interaction. Coding agents, live demos, and
-mobility workflows still require a mouse or trackpad to navigate, scroll, select, drag, change apps,
-or confirm what happened. A speaker also loses presence whenever they have to return to the laptop
-to operate a presentation.
+语音可以生成提示，却无法完成后续交互。编程代理、现场演示和行动辅助流程仍需借助鼠标或触控板来导航、滚动、选择、拖动、切换应用或确认结果。演讲者也常因必须回到笔记本操作演示而离开现场。
 
-### What works today
+### 当前可用功能
 
-- **Touch plus ring:** pointer movement with a tunable acceleration curve; accelerated vertical or
-  horizontal ring scrolling; click, tap, and sticky drag.
-- **A complete gesture grammar:** tap, double tap, triple tap, and up to three timed long-press
-  stages on configurable inputs.
-- **App x Layer context:** the same physical control changes with the frontmost app and any of up to
-  ten named, colored layers.
-- **State you can trust:** a compact persistent widget and optional HUDs show the real layer, action,
-  hold progress, connection state, system state, and live voice activity.
-- **Voice plus fallback:** experimental Siri Remote voice capture can feed a virtual Mac input, with
-  the built-in microphone used when remote audio is unavailable.
-- **Agent-friendly by design:** the native GUI, scripts, and coding agents edit the same hot-reloaded
-  JSONC configuration.
+- **触控表面与圆环：**指针移动和可调加速曲线；圆环可加速竖向或横向滚动；支持点击、轻点和锁定拖动。
+- **完整手势组合：**可配置输入支持轻点、双击、三击及最多三个按时长触发的长按阶段。
+- **应用 × 图层上下文：**同一物理控制可根据最前端应用和最多十个命名/着色图层执行不同操作。
+- **可见状态反馈：**精简常驻小组件和可选 HUD 显示实际图层、操作、长按进度、连接状态、系统状态和实时语音活动。
+- **语音与回退：**实验性的 Siri Remote 语音采集路径可馈送给 Mac 虚拟输入；遥控器音频不可用时改用内置麦克风。
+- **为代理而设计：**原生图形界面、脚本和编程代理编辑同一份热重载 JSONC 配置。
 
-### Why it matters
+### 使用价值
 
-1. **Voice-assisted coding:** speak, navigate the result, scroll, select, and approve without
-   breaking the workflow to reach for another device.
-2. **Standing presentations:** remain in the room as a speaker while controlling slides, a live app,
-   the pointer, and a demo Mac.
-3. **Alternative Mac input:** concentrate common pointing and command tasks in one small,
-   configurable, one-handed surface.
+1. **语音辅助编程：**说出指令后继续导航结果、滚动、选择并确认，无需中断流程去拿另一台设备。
+2. **站立演示：**演讲者无需返回桌边，即可控制幻灯片、实时应用、指针和演示 Mac。
+3. **替代 Mac 输入：**把常见指针和命令操作集中到一个小巧、可配置的单手控制面上。
 
-### The platform request
+### 平台请求
 
-The proof of concept demonstrates the interaction, but not a supportable distribution path. Apple
-documents Siri Remote game input for Apple TV; in our macOS testing, full third-generation Remote
-touch input still depends on private MultitouchSupport behavior, while remote voice uses an
-undocumented Bluetooth path. HyperVibe asks Apple to consider supported, permissioned macOS APIs
-for paired Siri Remote button/ring/touch input and microphone capture, with a sandbox-compatible
-entitlement and routing model.
+概念验证展示了交互方式，但尚未提供可长期支持的分发路径。Apple 为 Apple TV 记录了 Siri Remote 游戏输入；但在我们的 macOS 测试中，第三代遥控器完整触控输入仍依赖私有 MultitouchSupport 行为，遥控器语音则使用未公开的蓝牙路径。HyperVibe 希望 Apple 考虑为已配对 Siri Remote 的按键/圆环/触控输入及麦克风采集提供受支持、经授权的 macOS API，并提供兼容 App Sandbox 的 entitlement 和路由模型。
 
-### Public evidence
+### 公开证据
 
-macOS 13+ on Apple silicon | third-generation USB-C Siri Remote | public source and beta releases |
-native installer and live permission checks | current reviewed tree: 130/130 core tests
+macOS 13 或更高版本（Apple 芯片）｜第三代 USB-C Siri Remote｜公开源码和 Beta 版本｜原生安装器和实时权限检查｜当前已审阅代码树：核心测试 130/130 通过
 
-Repository: https://github.com/HOLODATA-COM/SiriRemoteForge
-Demo: PUBLIC_DEMO_URL
-Contact: Wenqian Zhang - zhangwenqian6915@gmail.com
+仓库：https://github.com/HOLODATA-COM/SiriRemoteForge
+演示：PUBLIC_DEMO_URL
+联系人：Wenqian Zhang - zhangwenqian6915@gmail.com
 
-This is an existing public, non-confidential research project. Remote voice is experimental and
-depends on undocumented system behavior; the public API requests are filed separately through
-Feedback Assistant.
+这是已有的公开、非保密研究项目。遥控器语音仍属实验功能，并依赖未公开的系统行为；针对公开 API 的请求会通过 Feedback Assistant 单独提交。

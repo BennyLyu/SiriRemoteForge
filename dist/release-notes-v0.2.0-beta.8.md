@@ -1,94 +1,53 @@
 # SiriRemoteForge v0.2.0-beta.8
 
-This release is an upgrade from **v0.2.0-beta.7**. It makes the particle Voice orb clearer and more
-expressive, supports two connected Siri Remotes without sacrificing input or microphone handoff,
-fixes native dictation selecting the Mac microphone when remote audio should be available, and lets
-a new Voice long hold cancel a result that is still processing.
+本版从 beta.7 升级：让粒子语音球更清晰、更有表现力；支持两台 Siri Remote 同时连接并可靠切换输入和麦克风；修复原生听写在应使用遥控器音源时选择 Mac 麦克风的问题；还可通过再次长按 Voice 取消仍在处理的结果。
 
-## Upgrade from beta.7
+## 从 beta.7 升级
 
-- **Existing beta.7 installation:** use **Check for Updates…** for the authenticated app-only
-  update, or download `HyperVibe-0.2.0-beta.8-macOS-arm64.zip`.
-- **Important for Siri Remote microphone improvements:** install
-  `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.pkg`. Sparkle intentionally updates only the App; the
-  capture daemon and microphone router changes in this release require Full Setup.
-- **First installation:** use `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.pkg`.
-- **Legacy Full Setup:** `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.zip` remains available when the
-  native Installer cannot be used.
+- 已安装 beta.7：使用“检查更新…”获取经过认证的仅应用更新，或下载 `HyperVibe-0.2.0-beta.8-macOS-arm64.zip`。
+- **需要 Siri Remote 麦克风改进时：**安装 `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.pkg`。本版的采集服务和麦克风路由器有改动，必须使用 Full Setup；Sparkle 仅更新应用。
+- 首次安装请使用 `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.pkg`。无法使用原生安装器时，可下载 `HyperVibe-Full-Setup-0.2.0-beta.8-arm64.zip`。
 
-These beta artifacts remain non-notarized. The App bundles are ad-hoc signed and the native package
-is unsigned because the project does not yet have Developer ID distribution certificates.
-Control-click the download and choose **Open** once; never disable Gatekeeper globally. HyperVibe
-requires macOS 13 or newer on Apple silicon.
+测试包未经 Apple 公证；应用为 ad-hoc 签名，原生安装包未签名。首次打开时按住 Control 点按并选择“打开”；不要全局关闭 Gatekeeper。需要 macOS 13 或更高版本和 Apple 芯片。
 
-## What changed since beta.7
+## 相比 beta.7 的变化
 
-### More legible, more responsive Voice orb
+### 更清楚、灵敏的粒子语音球
 
-- The Listening orb now has larger but still refined particles and a borderless frosted material
-  behind the complete sphere. The material stays even inside the orb, feathers only outside its
-  particle envelope, and follows the live envelope instead of exposing a fixed disc or rectangle.
-- Bright particles and a deliberately neutral dark material preserve contrast over both light and
-  dark application backgrounds without requesting Screen Recording permission.
-- Soft speech is no longer lost behind a second visual noise gate. Volume, onset and pitch produce
-  stronger motion with longer carry and recoil, while a bounded common breath keeps background
-  noise from pinning the sphere at its maximum size.
-- Speech deformation is strictly symmetric by latitude layer: a whole layer may expand or contract,
-  but individual points cannot create lopsided bulges. Outward layers simultaneously gain particle
-  size and light, producing the clearer Siri-like sense of visual mass requested after beta.7.
+- Listening 粒子更大但仍保持细致；球体后加入无边框磨砂材质，填充球内并只在粒子边界之外柔化，随实时外形变化，不显示固定圆盘或矩形。
+- 明亮粒子与中性的深色材质在浅色和深色应用背景上都保持对比，无需屏幕录制权限。
+- 轻声不会被第二道视觉噪声门限遮掉。音量、起音和音高会产生更明显、延续更久的运动；受限的整体呼吸效果可避免背景噪声让球体长期维持最大尺寸。
+- 语音形变按纬度层严格对称；每层整体扩张或收缩，单个点不会形成偏斜凸起。外层同步增加粒子尺寸和亮度，营造更清晰的球体质感。
 
-### Seamless two-remote input and microphone switching
+### 两台遥控器之间平滑切换输入和麦克风
 
-- Multiple same-model Siri Remotes are tracked by physical device rather than collapsed into one
-  vendor/product identity. Disconnecting one remote no longer tears down the surviving remote.
-- Buttons and multitouch surfaces can switch between two connected remotes without a stale release
-  ending the new gesture. A held Siri action remains open until the last physical holder releases.
-- Native Voice re-arms only the remote that produced the Siri press, including during a handoff.
-  The required generation-3 management interfaces stay open non-exclusively, so either remote can
-  wake its microphone without occupying the IR/radio services.
+- 按物理设备分别跟踪多台同型号遥控器，不再合并成一个厂商/产品身份；断开一台不会关闭另一台。
+- 按键与触控面可在两台连接设备间切换，不会让旧设备的释放事件终止新设备的手势；只有最后一个实体按键释放时，Siri 长按才结束。
+- 原生 Voice 只重新激活产生 Siri 按下事件的遥控器，包括设备交接期间。第三代设备所需的管理接口以非独占方式保持开启，因此任一遥控器都能唤醒麦克风，而不占用红外/无线电接口。
 
-### Native Voice now wakes and selects remote audio correctly
+### 原生 Voice 正确唤醒并选择遥控器音频
 
-- Native dictation publishes its own process-owned microphone demand on the raw press edge. The
-  capture supervisor watches that owner for crash cleanup and starts the remote pipeline even though
-  native Voice reads shared memory directly instead of opening the virtual CoreAudio device.
-- Remote selection waits briefly for fresh frames while losslessly buffering the built-in fallback.
-  A newly launched router starts at the current capture baseline, preventing the previous
-  utterance's tail from leaking into a new turn; an already-live router retains valid pre-roll.
-- The router accepts dynamically allocated ATT value handles only after the complete direction,
-  notification, length, sequence and Opus framing checks pass. This covers different per-remote GATT
-  layouts without weakening the audio-frame validation.
+- 原生听写在实体按键按下沿发布由当前进程持有的麦克风需求。采集监控服务会清理崩溃后遗留的需求，并在原生 Voice 直接读取共享内存时启动遥控器采集管线；它不必打开虚拟 CoreAudio 设备。
+- 等待遥控器新音频帧时，会无损缓存内置麦克风回退音源。新启动的路由器从当前采集基线开始，避免上一轮尾音混入；已运行的路由器会保留有效预录音频。
+- 动态 ATT 句柄只有通过方向、通知、长度、序号和 Opus 帧检查后才会接受，兼容不同遥控器 GATT 布局且不降低音频帧校验要求。
 
-### Cancel processing by starting a new Voice hold
+### 再次长按 Voice 取消处理中结果
 
-- If a released Voice turn is still transcribing or rewriting, press and hold Siri again to cancel
-  that old result and immediately begin a fresh Listening turn.
-- Replacement capture begins on the raw press edge, so the 200 ms long-hold discriminator does not
-  cut off the first phoneme. A quick accidental press discards only the speculative capture and lets
-  the existing result continue.
-- Every irreversible insertion path checks session ownership. Even if a cancelled provider request
-  ignores cooperative cancellation and returns late, it cannot insert stale text or overwrite the
-  new turn. The visible particle formation morphs directly back to Listening without blinking.
+- 录音结束后，如果转录或改写仍在进行，再次长按 Siri 可取消旧结果并立即开始新一轮 Listening。
+- 新录音从实体按下沿开始，因此 200 ms 长按识别不会截掉首个音节；快速误触只丢弃预备采集，让旧结果继续处理。
+- 所有不可逆插入路径都会检查会话所有权。即使已取消的服务请求稍后返回，也不能插入过期文本或覆盖新一轮内容；粒子动画直接过渡回 Listening，不闪烁。
 
-## Verification
+## 验证与下载校验
 
-- SiriRemoteCore: **134/134 tests passed**.
-- Packaged native Voice: **122/122 self-checks passed**.
-- Microphone router parser and monitor-ring tests, capture daemon, HAL driver contract and offline
-  CoreAudio handoff simulation pass with warnings treated as errors.
-- The release audit expands the app-only ZIP, Full Setup ZIP and native package; verifies checksums,
-  signatures, payload seals, architecture, macOS deployment target, updater metadata and licenses;
-  and rejects private paths, hardware identifiers, personal config and PacketLogger.
-- The published Sparkle feed and app-only enclosure are checked independently after upload: feed
-  signature, beta channel, monotonic build, URL, content length, archive signature and embedded App
-  version must all agree before the release is considered complete.
+- SiriRemoteCore 134 项测试通过；原生 Voice 122 项自检通过。
+- 麦克风路由器解析与监控环形缓冲区测试、采集服务、HAL 驱动契约及离线 CoreAudio 交接模拟均通过，并将警告视为错误。
+- 发布审计验证仅应用 ZIP、Full Setup ZIP 和安装包的校验和、签名、架构、最低系统版本、更新元数据与许可证，并排除私有路径、硬件标识、个人配置和 PacketLogger。
+- 上传后还会独立检查 Sparkle feed 和仅应用下载文件：feed 签名、beta 通道、单调递增版本、URL、长度、压缩包签名和应用版本必须一致。
 
-Use the attached `SHA256SUMS.txt` to verify all downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote model and firmware when reporting a
-reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器型号与固件版本。

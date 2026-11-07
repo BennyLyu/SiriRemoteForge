@@ -1,22 +1,17 @@
-# Security policy
+# 安全策略
 
-## Scope
+## 适用范围
 
-This app runs unsandboxed with Accessibility permission and can synthesize input, run shell commands
-and AppleScript, and seize a HID device. Treat a `config.jsonc` from someone else as you would treat
-a shell script from someone else: `shell` and `applescript` bindings run whatever they say.
+此应用未使用 App Sandbox；它拥有辅助功能权限，可以合成输入、运行 Shell 命令和 AppleScript，也会独占 HID 设备。处理他人提供的 `config.jsonc` 时，请像处理他人提供的 Shell 脚本一样谨慎：其中的 `shell` 和 `applescript` 绑定会执行配置指定的内容。
 
-The app does not phone home, and reads nothing beyond your config, the remote, and the display list.
+应用不会主动连接回服务器；除配置文件、遥控器和显示器列表外，不读取其他数据。
 
-## Reporting a vulnerability
+## 报告安全漏洞
 
-Please do **not** open a public issue for anything exploitable. Use GitHub's private reporting —
-**Security → Report a vulnerability** on this repository — and include what an attacker would need
-(local access, a crafted config, a paired device) and what they gain.
+请勿公开提交可被利用的问题。请使用 GitHub 的私密漏洞报告功能：进入此仓库的 **Security → Report a vulnerability**，并说明攻击者需要哪些条件（例如本地访问权限、特制配置或已配对设备），以及可能造成的影响。
 
-Expect an initial reply within about a week. This is a hobby project maintained by one person, so
-please size your expectations accordingly.
+我们通常会在一周左右首次回复。本项目由一名维护者业余维护，请据此安排预期。
 
-## Supported versions
+## 支持的版本
 
-Only `main` is supported. There are no backports.
+仅支持 `main` 分支，不提供旧版本回补。

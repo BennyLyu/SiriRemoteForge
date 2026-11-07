@@ -1,83 +1,46 @@
 # SiriRemoteForge v0.2.0-beta.9
 
-This release upgrades **v0.2.0-beta.8** with safer dictation delivery, a hands-free keyboard
-shortcut, Escape cancellation, longer recordings, and a fix for clipped words when releasing the
-remote microphone. The existing particle orb and two-remote support remain unchanged.
+本版从 beta.8 升级：提升听写交付安全性，新增免持快捷键、Escape 取消和十分钟录音，并修复释放遥控器麦克风时末尾字词被截断的问题。现有粒子语音球和双遥控器支持保持不变。
 
-## Upgrade from beta.8
+## 从 beta.8 升级
 
-- **Existing installation:** choose **Check for Updates…** or download
-  `HyperVibe-0.2.0-beta.9-macOS-arm64.zip`. All changes in this release are in the App;
-  an existing beta.8 Full Setup installation does not need its system audio services reinstalled.
-- **First installation:** use `HyperVibe-Full-Setup-0.2.0-beta.9-arm64.pkg`.
-- The legacy `HyperVibe-Full-Setup-0.2.0-beta.9-arm64.zip` is also available.
+- 已有安装：选择“检查更新…”或下载 `HyperVibe-0.2.0-beta.9-macOS-arm64.zip`。本版改动都在应用中，beta.8 的 Full Setup 安装无需重新安装系统音频服务。
+- 首次安装请使用 `HyperVibe-Full-Setup-0.2.0-beta.9-arm64.pkg`；也可使用旧版完整安装包 `HyperVibe-Full-Setup-0.2.0-beta.9-arm64.zip`。
 
-Requires Apple silicon and macOS 13 or later. As with beta.8, public App bundles are ad-hoc signed,
-the Installer is unsigned, and these downloads are not Apple-notarized. Use Control-click → Open
-for the first launch; never disable Gatekeeper globally. Existing personal configuration and API
-credentials are not included in downloads and are not reset by this release.
+需要 Apple 芯片和 macOS 13 或更高版本。公开应用为 ad-hoc 签名，安装器未签名，下载未经 Apple 公证。首次打开时按住 Control 点按并选择“打开”；不要全局关闭 Gatekeeper。下载包不含个人配置或 API 凭据，本版也不会重置它们。
 
-## What changed since beta.8
+## 相比 beta.8 的变化
 
-### Results no longer disappear behind a misleading clipboard message
+### 听写结果不再因剪贴板提示而丢失
 
-- Sending Command-V is no longer treated as proof that the editor inserted the text. Final
-  delivery checks Accessibility text and the caret range for the exact expected edit.
-- If an editor cannot confirm insertion, the result stays on the clipboard and the UI explicitly
-  says insertion is unconfirmed. Another insertion route is not attempted after a dispatched
-  paste, avoiding duplicate text.
-- Clipboard writes are read back before reporting success. The previous clipboard is restored
-  only after confirmed insertion, with a two-second grace period. A newer user copy or Voice
-  operation always invalidates older restores.
-- Busy editors get realistic focus-query timeouts rather than being immediately mistaken for a
-  different target. Actual focus changes and secure fields still block insertion.
-- Double-press the remote side button to **paste the previous dictation** into the current target,
-  with clipboard fallback if it cannot be inserted. Older `copyLastOnSideButtonDouble` settings
-  migrate automatically to `pasteLastOnSideButtonDouble`.
-- Diagnostic logs now identify each turn and its final outcome, stage and timings. Clipboard
-  diagnostics contain ownership, length and per-process-salted fingerprints, not spoken text or
-  clipboard contents.
+- 发送 Command-V 不再被当作编辑器已插入文本的证明；最终交付会核对 Accessibility 文本和插入点范围，确认是否发生了完全符合预期的编辑。
+- 编辑器无法确认插入时，结果仍保留在剪贴板，界面明确显示“未确认已插入”。粘贴事件已发送后不会再尝试另一种插入路径，避免重复文本。
+- 报告成功前会回读剪贴板内容。只有确认插入后才会在两秒宽限期后恢复旧剪贴板；用户较新的复制或 Voice 操作会使旧恢复失效。
+- 忙碌编辑器会获得合理的焦点查询等待时间，不会立刻被误判为不同目标；焦点确实变化或字段为安全输入框时仍会阻止插入。
+- 双击遥控器侧边键可将上一条听写粘贴到当前目标；无法插入时保留剪贴板回退。旧配置 `copyLastOnSideButtonDouble` 会自动迁移为 `pasteLastOnSideButtonDouble`。
+- 诊断日志记录每一轮的 ID、最终结果、阶段和耗时。剪贴板日志仅记录所有权、长度和按进程加盐的指纹，不记录语音文本或剪贴板内容。
 
-### Hands-free shortcut, cancellation and ten-minute capture
+### 免持快捷键、取消和十分钟采集
 
-- Configure **Voice → Keyboard Trigger**: press the shortcut once to start, release it while
-  speaking, then press again to stop. Modifier-only shortcuts are supported. The remote retains
-  hold-to-talk, and the existing External route remains available.
-- Press **Esc** while recording or processing to cancel the entire turn, including any pending
-  replacement. Late network responses cannot insert cancelled text. Idle Escape behaves normally.
-  Live text already inserted before cancellation cannot be retracted.
-- New/default recording limits are ten minutes, with a hard maximum of 600 seconds. Existing
-  explicitly configured shorter limits remain respected. Reaching the limit finishes and
-  transcribes normally; Escape discards the turn instead.
-- Long Final uploads are downsampled only when needed to fit the transcription upload limit;
-  ordinary recordings and the retained original audio remain at 24 kHz.
+- 在 **Voice → Keyboard Trigger** 设置快捷键：按一次开始，讲话时可松开，再按一次停止；支持仅修饰键组合。遥控器按住说话和现有 External 路由仍可用。
+- 录音或处理时按 **Esc** 可取消整轮操作，包括待执行的替换；稍后返回的网络结果不会插入文本。空闲时 Escape 仍按系统默认处理。取消前已实时插入的文字无法撤回。
+- 新安装默认录音上限为十分钟，硬上限 600 秒；已有明确配置的较短时长会继续生效。达到上限会正常结束并转录，按 Escape 则丢弃本轮。
+- 只有 Final 上传需要时才会降低长录音采样率以满足上传大小限制；普通录音和保留的原始音频仍为 24 kHz。
 
-### More reliable capture and bounded processing
+### 更可靠的采集与有界处理
 
-- Releasing a valid remote recording briefly drains delayed audio frames (120 ms quiet window,
-  320 ms maximum), reducing clipped final words without adding that wait to short discarded turns
-  or built-in-microphone recordings.
-- A WebSocket ping completion is accepted only once, preventing duplicate-continuation crashes
-  during socket teardown.
-- A stalled live transcription commit falls back to the complete recorded buffer after five
-  seconds rather than fifteen. Optional polishing has a length-dependent budget; on timeout the
-  dictionary-corrected transcript is delivered without waiting for the stalled polish request.
+- 有效的遥控器录音释放后，会短暂排空延迟到达的音频帧（静音窗口 120 ms，最多 320 ms），减少末尾字词被截断；短误触和内置麦克风录音不会增加此等待。
+- WebSocket ping 完成回调只处理一次，避免连接关闭期间重复继续导致崩溃。
+- 实时转录卡住时，5 秒后改用完整录音缓冲区，而非等待 15 秒。可选润色按文本长度设置时限；超时后直接交付经词典修正的转录，不再等待润色服务。
 
-## Verification and downloads
+## 验证与下载校验
 
-- SiriRemoteCore: **136 tests passed**.
-- Native Voice: **175 offline self-checks passed**, including isolated clipboard transactions,
-  cancellation, insertion confirmation, shortcut classification and long-recording encoding.
-- Release packaging independently audits signatures, checksums, versions, payload seals,
-  architecture, licenses and the public/private data boundary.
-- The signed Sparkle feed and public app-only download are independently verified after publication.
-
-`SHA256SUMS.txt` covers the App ZIP, Full Setup ZIP and Installer:
+- SiriRemoteCore 的 136 项测试通过；原生 Voice 的 175 项离线自检通过，覆盖隔离剪贴板事务、取消、插入确认、快捷键分类和长录音编码。
+- 发布打包审计独立检查签名、校验和、版本、封装内容、架构、许可证和公开/私有数据边界。
+- `SHA256SUMS.txt` 包含应用 ZIP、Full Setup ZIP 和安装器：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This is the macOS HyperVibe release. The separate experimental VoiceInk macOS/Windows project
-remains on its own development branch and is not bundled here. Siri Remote voice still requires
-Apple's separately installed PacketLogger; the built-in microphone fallback works without it.
+这是 macOS HyperVibe 发行版。独立实验性的 VoiceInk macOS/Windows 项目仍在自己的开发分支，不包含在此版本中。Siri Remote 语音采集仍需另行安装 Apple PacketLogger；没有它时可回退到内置麦克风。

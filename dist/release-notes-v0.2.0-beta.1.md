@@ -1,83 +1,55 @@
 # SiriRemoteForge v0.2.0-beta.1
 
-This beta is a substantial macOS interaction and feedback update. It makes the remote's current
-state visible without interrupting the app underneath, expands layer configuration, and gives
-pointer and circular-scroll tuning separate, directly editable acceleration curves.
+本版更新 macOS 交互与状态反馈：可在不遮挡底层应用的情况下查看遥控器状态，扩展图层设置，并为指针和圆周滚动提供可单独编辑的加速度曲线。
 
-## Choose one download
+## 选择一个下载包
 
-- **App only:** `HyperVibe-0.2.0-beta.1-macOS-arm64.zip`
-  Unzip it, move `HyperVibe.app` to Applications, then right-click → **Open** once.
-- **Full Setup (advanced):** `HyperVibe-Full-Setup-0.2.0-beta.1-arm64.zip`
-  Includes HyperVibe, Siri Remote Mic, the on-demand voice-capture service, and
-  `HyperVibe Uninstall.app`. Installation asks for an administrator password, briefly restarts
-  system audio, and verifies `coreaudiod` with automatic plug-in rollback.
+- **仅应用：** `HyperVibe-0.2.0-beta.1-macOS-arm64.zip`。解压后将 `HyperVibe.app` 移至“应用程序”，然后右键点按并选择一次“打开”。
+- **完整安装（进阶）：** `HyperVibe-Full-Setup-0.2.0-beta.1-arm64.zip`。包含 HyperVibe、Siri Remote Mic、按需语音采集服务和 `HyperVibe Uninstall.app`。安装需管理员授权，会短暂重启系统音频，并通过 `coreaudiod` 检查及自动回滚验证插件。
 
-Both builds are ad-hoc signed and not Apple-notarized. They require macOS 13 or newer on Apple
-silicon and a third-generation USB-C Siri Remote.
+两个版本均为 ad-hoc 签名，未经 Apple 公证。需要 macOS 13 或更高版本、Apple 芯片和第三代 USB-C Siri Remote。
 
-## Highlights
+## 主要变化
 
-### A compact status surface that stays out of the way
+### 不遮挡操作的紧凑状态面板
 
-- Adds an optional always-on status widget, enabled by default, that shows the current layer at
-  rest and the action that actually ran after an input.
-- Keeps long-press feedback tied to the physical press lifetime. Progress begins at 0.18 seconds,
-  while the configured action threshold remains unchanged, and the selected face stays visible
-  until release.
-- Uses shared-axis element transitions: icons turn around their vertical centre line, text turns
-  around its horizontal centre line, and layer changes roll as one continuous vertical wheel.
-- Removes the redundant “Next Layer” intermediary, large page slides, and the external dark shadow.
-- Lets the entire widget be dragged, remembers its display and normalized position, and safely
-  returns it to an available screen when a monitor is disconnected.
+- 新增默认启用的可选常驻状态小组件：闲置时显示当前图层，操作后显示实际执行的动作。
+- 长按反馈跟随实体按键的按压时长：0.18 秒开始显示进度，但不改变已配置的动作触发阈值；选中的图标会持续显示到按键释放。
+- 图标绕垂直中轴翻转、文字绕水平中轴翻转，图层变化以连续垂直滚轮动画呈现；移除多余的“下一图层”中间状态、大幅页面滑动和外部暗阴影。
+- 小组件可拖动，会记住显示器和相对位置；显示器断开时会移到仍可用的屏幕。
 
-### Voice feedback with real acoustic information
+### 提供真实声学信息的语音反馈
 
-- Expands voice mode into a full-card 25-bar console instead of a decorative level meter.
-- Shows real loudness history, relative pitch direction, pitch confidence, spectral brightness,
-  and elapsed recording time from the microphone source currently serving Siri Remote Mic.
-- Uses indigo–cyan–amber pitch colour, confidence-aware saturation, a brightness cap, and a clear
-  red live-recording indicator. Silence settles flat rather than running a looping animation.
-- Transforms directly between the layer/action face and the voice console, with no temporary
-  completion page or blank transition frame.
+- 语音模式使用完整卡片和 25 条波形显示，而非装饰性音量表。
+- 展示当前 Siri Remote Mic 音源的响度历史、音高变化与置信度、频谱亮度和录音时长。
+- 颜色表达音高，饱和度反映置信度，红点表示正在录音；静音时波形会回落，不再循环播放动画。
+- 图层/动作面板与语音控制台直接过渡，不插入空白或临时完成页。
 
-### Configurable layers and tuning
+### 可配置图层与调节
 
-- Supports 1–10 ordered layers with custom names and colours. `layerCycle` follows that order and
-  loops from the final entry back to the first.
-- Keeps legacy layer HUD configuration loadable and migrates it when Settings writes the file.
-- Separates pointer and circular-scroll acceleration into two editable graphs, with independent
-  curves and an optional shape lock.
-- Reworks Settings into a wider desktop layout and adds independent toggles for the compact status
-  widget and the larger long-press HUD.
+- 支持 1–10 个有序图层，可自定义名称和颜色；`layerCycle` 按顺序循环。
+- 保留并迁移旧版图层 HUD 配置。指针与圆周滚动使用两张独立加速度曲线，可分别编辑，也可锁定曲线形状。
+- 设置窗口改为更宽的桌面布局，并可分别控制紧凑状态小组件和长按 HUD。
 
-### Input and display reliability
+### 输入和显示稳定性
 
-- Deduplicates mirrored HID button edges so one physical press cannot emit the same shortcut
-  repeatedly.
-- Keeps push-to-talk edge-driven and visible for the complete side-button hold.
-- Reduces voice-meter sensitivity to background noise while retaining response to real speech.
-- Keeps HUD and widget placement valid across multiple displays and full-screen Spaces.
+- 合并重复的 HID 按键边缘事件，避免一次实体按压重复发送快捷键。
+- 按键通话按实际按压与释放控制，并在整个侧边键按住期间显示状态。
+- 降低语音表对背景噪声的敏感度，同时保留对真实语音的响应；多显示器和全屏空间中的 HUD/小组件位置也更稳定。
 
-## Microphone note
+## 麦克风说明
 
-Remote Bluetooth voice capture additionally needs Apple's PacketLogger from
-[*Additional Tools for Xcode*](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode).
-PacketLogger is not bundled. The main app and built-in-microphone fallback remain usable without it.
+遥控器蓝牙语音采集还需要从 [Xcode Additional Tools](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode) 获取 Apple 的 PacketLogger。项目不附带 PacketLogger；没有它时，主应用和内置麦克风回退仍可使用。
 
-## Verification
+## 验证与下载校验
 
-- 113 SiriRemoteCore tests passed.
-- The complete arm64 macOS app build passed.
-- Release archives are checksum-verified, signature-verified, architecture-audited, and scanned for
-  private paths, device identifiers, personal configuration, PacketLogger, and production media.
+- SiriRemoteCore 的 113 项测试通过，arm64 macOS 应用构建通过。
+- 发布包已校验校验和、签名和架构，并检查是否包含私有路径、设备标识、个人配置、PacketLogger 或正式媒体素材。
 
-Use the attached `SHA256SUMS.txt` to verify the downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware, and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。

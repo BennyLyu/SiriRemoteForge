@@ -1,114 +1,62 @@
 # SiriRemoteForge v0.2.0-beta.7
 
-This release is an upgrade from **v0.2.0-beta.6**. It replaces the rectangular Voice capsule with
-an audio-reactive particle orb, adds safe spoken editing of selected text, learns app-specific
-dictation style and user corrections, strengthens delivery recovery, and fixes Siri Remote voice
-capture on firmware layouts that use ATT handle `0x0036`.
+本版从 beta.6 升级：将矩形语音卡片改为随音频变化的粒子球，新增安全的选中文字语音改写、按应用区分的听写记忆和用户纠错学习，强化结果交付恢复，并修复 ATT 句柄为 `0x0036` 的遥控器固件语音采集。
 
-## Upgrade from beta.6
+## 从 beta.6 升级
 
-- **Existing beta.6 installation:** use **Check for Updates…** for the app-only update, or download
-  `HyperVibe-0.2.0-beta.7-macOS-arm64.zip`.
-- **Important for issue #7 / ATT handle `0x0036`:** install
-  `HyperVibe-Full-Setup-0.2.0-beta.7-arm64.pkg`. The parser fix lives in the separately installed
-  Siri Remote Mic router; Sparkle's app-only update intentionally does not replace system audio or
-  capture components.
-- **First installation:** use `HyperVibe-Full-Setup-0.2.0-beta.7-arm64.pkg`.
-- **Legacy Full Setup:** `HyperVibe-Full-Setup-0.2.0-beta.7-arm64.zip` remains available when the
-  native Installer cannot be used.
+- 已安装 beta.6：使用“检查更新…”获取仅应用更新，或下载 `HyperVibe-0.2.0-beta.7-macOS-arm64.zip`。
+- **若遇到问题 #7 / ATT 句柄 `0x0036`：**请安装 `HyperVibe-Full-Setup-0.2.0-beta.7-arm64.pkg`。修复位于单独安装的 Siri Remote Mic 路由器中，仅应用更新不会替换系统音频或采集组件。
+- 首次安装请使用上述 Full Setup 安装器。无法使用原生安装器时，可下载 `HyperVibe-Full-Setup-0.2.0-beta.7-arm64.zip`。
 
-These beta artifacts remain non-notarized. The App bundles are ad-hoc signed and the native package
-is unsigned because the project does not yet have Developer ID distribution certificates.
-Control-click the download and choose **Open** once; never disable Gatekeeper globally. HyperVibe
-requires macOS 13 or newer on Apple silicon.
+测试包未经 Apple 公证；应用为 ad-hoc 签名，原生安装包未签名。首次打开时按住 Control 点按并选择“打开”；不要全局关闭 Gatekeeper。需要 macOS 13 或更高版本和 Apple 芯片。
 
-## What changed since beta.6
+## 相比 beta.6 的变化
 
-### Audio-reactive particle Voice orb
+### 随音频变化的粒子语音球
 
-- Replaces the old rectangular Voice card with a larger spherical field of individually animated
-  particles. Listening reacts to measured level, pitch confidence and spectral energy instead of
-  rotating as one decorative object.
-- Particles arrive together from changing off-orb positions, preserve interruption continuity and
-  reverse cleanly when a sub-minimum recording is discarded.
-- Processing stages morph continuously rather than using the previous sweep-tail treatment.
-  Success, failure and clipboard recovery resolve into particle-built check, cross and Copy forms.
-- Mute + Side still cycles External / Final / Live globally, but its three choices remain recognisable
-  icons rather than three competing Voice balls. Layer colour is carried into the orb.
+- 以球形粒子场取代旧矩形语音卡片。Listening 状态根据实测响度、音高置信度和频谱能量响应，不再只是整体旋转的装饰物。
+- 粒子从不断变化的球外位置汇聚，可连续处理打断；丢弃短于最低时长的录音时也会平滑反向退场。
+- 处理阶段连续变形；成功、失败和剪贴板恢复状态分别由粒子组成勾号、叉号和 Copy 图案。
+- Mute + Side 仍可全局切换 External / Final / Live，三个选项使用清晰图标而非多个相似语音球；粒子球沿用图层颜色。
 
-### Select, speak and replace
+### 选择文字、口述并替换
 
-- Holding Side while editable text is selected now treats the utterance as an edit instruction.
-  HyperVibe rewrites the exact selection captured at key-down and replaces it only if the same app,
-  field, selection and secure-input state remain valid.
-- Readable terminal or scrollback selections can still be transformed, but their result is copied
-  rather than pretending an in-place edit succeeded. Any failed replacement preserves the original
-  selection and copies the complete generated result.
-- Selection editing has its own enable switch and OpenAI / DeepSeek provider choice. Selected text
-  is isolated as untrusted source data; it is never treated as a prompt or answered conversationally.
+- 选中可编辑文字时按住 Side，可口述改写指令。HyperVibe 会改写按键按下时捕获的精确选区，只有应用、字段、选区和安全输入状态仍有效时才替换。
+- 终端或滚动区域中可读但不可编辑的选区仍可用于改写，结果会复制而不会假装已原位修改。替换失败时保留原选区，并复制完整生成结果。
+- 选区改写可以单独启用并选择 OpenAI 或 DeepSeek。被选文字作为不可信来源数据处理，不会当作提示词，也不会被模型以对话方式回答。
 
-### App-aware dictation memory and user corrections
+### 按应用记忆听写风格和用户修正
 
-- Ordinary dictation keeps up to 100 local examples for each explicit `appProfiles` group, or for
-  each individual app when no group exists. Final cleanup receives only the active target's latest
-  20 examples, helping recurring vocabulary, capitalization and formatting without mixing apps.
-- After a successful insertion, HyperVibe can observe only the just-inserted span in that same
-  Accessibility text field for 30 seconds. A stable backspace/retype correction replaces the saved
-  example, so future cleanup learns the user's correction rather than reinforcing the earlier error.
-- Canonical dictionary entries now reach transcription context even when they have no aliases.
-  Terms such as `skill`, `layer` and `core` therefore receive general vocabulary support without a
-  hard-coded `SQL` substitution.
+- 普通听写会为每个 `appProfiles` 分组或单独应用保存最多 100 条本地示例；最终清理只会收到当前目标的最近 20 条，帮助统一词汇、大小写和格式，避免跨应用混用。
+- 成功插入后，可在 30 秒内仅观察同一 Accessibility 文本字段中新插入的文字。若用户稳定地退格并重输，保存的示例会更新为用户修正后的内容。
+- 即使词典标准词条没有别名，也会进入转录上下文，提供通用词汇支持，不再依赖硬编码的 `SQL` 替换。
+- 历史记录保存在仅当前用户可访问的 `~/Library/Application Support/HyperVibe/VoiceHistory/history.json`（目录权限 `0700`，文件权限 `0600`）。不会记录字段原有内容或全局键盘活动。启用 Final 云端清理后，当前应用/分组的近期示例会发送给所选 OpenAI 或 DeepSeek 服务。清除记忆前请先退出 HyperVibe，再删除该文件。
 
-History is stored as current-user-only JSON at
-`~/Library/Application Support/HyperVibe/VoiceHistory/history.json` (directory mode `0700`, file
-mode `0600`). The field's pre-existing contents and global keyboard activity are never recorded.
-When Final cloud cleanup is enabled, the active app/group's recent examples are included in the
-request to the selected OpenAI or DeepSeek provider. Quit HyperVibe before deleting the history file
-to clear this memory.
+### 改进模式切换、插入和恢复
 
-### More reliable mode switching, insertion and recovery
+- 修复快速切换时界面显示 Final、实际却执行 External 的过期配置竞态。
+- 最终交付优先使用能在 Chrome 等网页编辑器中可靠触发 DOM 输入事件的兼容路径，同时保留 Accessibility 和 Unicode 回退。
+- React/Electron 编辑器可能在转录期间重建 Accessibility 节点；HyperVibe 现在只接受语义和几何位置兼容的新字段，并在修改前再次核验。
+- 无法确认直接交付时，始终保留完整文本在剪贴板，包括关闭自动插入、目标变化、安全字段和选区替换失败等情况。
+- 虚拟麦克风为每个 CoreAudio 客户端返回同一缓存帧窗口，避免次要读取端推进音源交接。释放的音源在 5 ms 交接期内耗尽时，只在剩余淡出时间保持最后一个真实样本，不再用零值填充造成爆音。
+- 凭据和服务商错误显示经过清理且可操作的原因；设置页读取缓存的凭据状态，不在主线程重新验证签名辅助程序。
 
-- Fixes a stale config-reload race where the UI could confirm Final while the next Side hold still
-  behaved as External. Rapid selector dismissal can no longer leave a real Voice turn invisible.
-- Final delivery now prioritises the compatibility path that reliably emits DOM input events in
-  Chrome and other web editors, while retaining Accessibility and Unicode fallbacks.
-- React and Electron editors may rebuild their Accessibility node during transcription. HyperVibe
-  now accepts only a semantically and geometrically compatible replacement field and rechecks it
-  immediately before mutation.
-- Completed text is always preserved on the clipboard when direct delivery cannot be proven,
-  including disabled auto-insert, changed or secure targets, and failed selection replacement.
-- The virtual microphone now returns an identical cached frame window to every CoreAudio client,
-  so a secondary reader cannot advance a source handoff behind the primary reader. When a released
-  source runs out during its 5 ms handoff, the last real sample is held only through the remaining
-  fade instead of zero-padding a click into the transition.
-- Credential and provider failures now show actionable, sanitised reasons. Settings reads cached
-  credential state instead of revalidating the signed helper on the main thread.
+### 兼容不同遥控器麦克风固件
 
-### Siri Remote microphone firmware compatibility
+- 修复 [问题 #7](https://github.com/HOLODATA-COM/SiriRemoteForge/issues/7)：路由器现在接受独立观测到的 Siri Remote 语音值句柄 `0x0035` 和 `0x0036`。
+- 保留接收方向、ATT 通知操作码、序号/长度布局和 Opus TOC `0xB8` 校验；未知句柄（如 `0x0037`）仍会拒绝。
+- A2854 / 固件 `0x0033` 的采集得到 619 个已解码帧，无解码错误且 PCM 非静音。发行包不包含私人语音录音或设备标识。
 
-- Fixes [issue #7](https://github.com/HOLODATA-COM/SiriRemoteForge/issues/7): the router now accepts
-  the two independently observed Siri Remote voice value handles, `0x0035` and `0x0036`.
-- All existing validation remains in place: receive direction, ATT notification opcode,
-  sequence/length layout and Opus TOC `0xB8`. Unknown handles such as `0x0037` remain rejected.
-- The reported A2854 / firmware `0x0033` capture produced 619 decoded frames with zero decoder errors
-  and non-silent PCM. Private voice captures and device identifiers are not included in this release.
+## 验证与下载校验
 
-## Verification
+- SiriRemoteCore 134 项测试通过；打包后的原生 Voice 通过 112 项自检。
+- 麦克风路由器解析器、监控环形缓冲区、Opus 解码器和所有发行组件均成功构建；GitHub CI 的 Core 和 App 检查通过。
+- 发布审计验证仅应用 ZIP、Full Setup ZIP 和安装包的校验和、签名、架构、部署版本、更新元数据和许可证，并排除私有路径、设备标识、个人配置和 PacketLogger。
 
-- SiriRemoteCore: **134/134 tests passed**.
-- Packaged native Voice: **112/112 self-checks passed**.
-- Microphone router parser, monitor ring, Opus decoder and all shipping components build successfully.
-- GitHub CI passes both Core and App jobs on the repository's Xcode 16 runner.
-- Release audit expands the app-only ZIP, Full Setup ZIP and native package; verifies checksums,
-  signatures, payload seals, architecture, macOS deployment target, updater metadata and license
-  notices; and rejects private paths, device identifiers, personal config and PacketLogger.
-
-Use the attached `SHA256SUMS.txt` to verify all downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote model and firmware when reporting a
-reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器型号与固件版本。

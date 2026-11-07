@@ -1,84 +1,50 @@
 # SiriRemoteForge v0.2.0-beta.4
 
-This beta makes HyperVibe's visual feedback truthful under rapid input. Action symbols now follow
-the action's meaning and measured system state, while long-press selection, progress and destination
-artwork advance from the same monotonic clock. It also adds relative display-brightness controls and
-the repository's new software-focused product website.
+本版让 HyperVibe 在快速输入时提供准确的视觉反馈：动作图标反映动作含义和系统实测状态，长按选择、进度和目标图案由同一单调时钟驱动。另新增相对显示器亮度控制和面向软件功能的项目网站。
 
-## Choose one download
+## 选择一个下载包
 
-- **App only:** `HyperVibe-0.2.0-beta.4-macOS-arm64.zip`
-  Unzip it, move `HyperVibe.app` to Applications, then right-click → **Open** once.
-- **Full Setup (advanced):** `HyperVibe-Full-Setup-0.2.0-beta.4-arm64.zip`
-  Includes HyperVibe, Siri Remote Mic, the on-demand voice-capture service, and
-  `HyperVibe Uninstall.app`. Installation asks for an administrator password, briefly restarts
-  system audio, and verifies `coreaudiod` with automatic plug-in rollback.
+- **仅应用：** `HyperVibe-0.2.0-beta.4-macOS-arm64.zip`。解压后将 `HyperVibe.app` 移至“应用程序”，然后右键点按并选择一次“打开”。
+- **完整安装（进阶）：** `HyperVibe-Full-Setup-0.2.0-beta.4-arm64.zip`。包含 HyperVibe、Siri Remote Mic、按需语音采集服务和 `HyperVibe Uninstall.app`。安装需管理员授权，会短暂重启系统音频，并通过 `coreaudiod` 检查及自动回滚验证插件。
 
-Both builds are ad-hoc signed and not Apple-notarized. They require macOS 13 or newer on Apple
-silicon and a third-generation USB-C Siri Remote.
+两个版本均为 ad-hoc 签名，未经 Apple 公证。需要 macOS 13 或更高版本、Apple 芯片和第三代 USB-C Siri Remote。
 
-## Highlights
+## 主要变化
 
-### Semantic, state-aware feedback
+### 语义化、感知状态的反馈
 
-- Gives every action one deterministic semantic colour and motion vocabulary across the compact
-  widget, long-press HUD and Layer HUD. Destructive actions are red, navigation is blue, media is
-  pink, pointer operations are teal, and reversible caution states are orange.
-- Uses Apple's authored SF Symbol layers and topology-aware replacement where the source and
-  destination genuinely belong to one symbol family. Unrelated actions keep a restrained compositor
-  transition instead of briefly merging into a malformed glyph.
-- Makes volume and brightness describe the measured system level. Repeated ticks update one stable
-  face without replaying its entrance, and volume-up/down retain identical symbol geometry.
-- Presents Mute or Unmute once from the predicted post-toggle state, then uses CoreAudio only to
-  confirm or correct the result. Rapid presses cannot let an older delayed sample win.
-- Rebuilds the three Layer sheets in place, reveals App Wheel's nine dots as a relay, preserves
-  semantic colour in the large water HUD, and keeps the widget frame and Layer aura fixed.
+- 小组件、长按 HUD 和图层 HUD 中的动作使用一致的颜色与动画语义：破坏性动作红色、导航蓝色、媒体粉色、指针操作青色、可撤销的警示状态橙色。
+- 仅当源图标和目标图标确实属于同一 SF Symbol 结构时才进行拓扑替换；无关动作使用克制的合成器转场，避免图形短暂畸变。
+- 音量和亮度图标反映系统实测值。重复调整只更新当前图标，不重播入场动画；音量增减的图形几何保持一致。
+- 静音/取消静音先按切换后的预期状态显示，再由 CoreAudio 确认或修正；快速按键时，较早的系统采样不会覆盖新状态。
+- 图层表和 App Wheel 使用连贯动画，水波 HUD 保留语义颜色，小组件和图层光晕尺寸固定。
 
-### Long-press feedback on one clock
+### 长按反馈统一使用同一时钟
 
-- Resolves the action, whole-card progress surface and large HUD from the same elapsed-time sample.
-  A busy main queue can no longer advance the water while Close, Quit or Cancel artwork waits behind
-  a separate timer.
-- Jumps directly to the stage valid at the current instant after a late frame instead of replaying
-  missed faces. The first visible frame also reflects what releasing at that instant would execute.
-- Keeps the accepted 0.18-second visual lead and the 0.5-second default first-stage threshold, while
-  the Play/Pause → Music binding now owns its faster 0.3-second delay without changing other holds.
+- 动作、卡片进度和大 HUD 都根据同一经过时间计算，避免主线程繁忙时进度先于 Close、Quit 或 Cancel 图案。
+- 错过动画帧时直接显示当前应有阶段，不重播过期图案；首个可见帧也反映此刻释放会执行的动作。
+- 保留 0.18 秒视觉提前量和默认 0.5 秒长按阈值；Play/Pause → Music 绑定可单独使用更快的 0.3 秒延迟。
 
-### Layer 3 brightness and public website
+### 第三图层亮度和项目网站
 
-- Adds the JSON action `{ "action": "brightnessStep", "to": "up|down" }`. The maintained Layer 3
-  mappings use it for the plus/minus buttons, preserving the current display level and moving by one
-  native brightness notch per press.
-- Adds the static `website/` product page with current App captures and native looping feedback. It
-  explains touchpad movement, accelerated ring scrolling, sticky drag, multi-stage gestures,
-  App × Layer resolution, live voice features, acceleration curves and Agent-editable JSONC without
-  scroll-scrubbed scenes or hardware-material claims.
-- Prevents LaunchServices from opening duplicate menu-bar instances when Login Items and a manual
-  reopen converge.
+- 新增 JSON 动作 `{ "action": "brightnessStep", "to": "up|down" }`。第三图层用加减按键以系统原生步进幅度调整亮度。
+- 新增静态 `website/` 产品页，说明触控板移动、加速圆环滚动、粘滞拖动、多阶段手势、应用与图层映射、实时语音和可由 Agent 编辑的 JSONC 配置。
+- 修复登录项启动与手动重开同时发生时 LaunchServices 打开多个菜单栏实例的问题。
 
-## Microphone note
+## 麦克风说明
 
-Remote Bluetooth voice capture additionally needs Apple's PacketLogger from
-[*Additional Tools for Xcode*](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode).
-PacketLogger is not bundled. The main app and built-in-microphone fallback remain usable without it.
+遥控器蓝牙语音采集还需要从 [Xcode Additional Tools](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode) 获取 Apple 的 PacketLogger。项目不附带 PacketLogger；没有它时，主应用和内置麦克风回退仍可使用。
 
-## Verification
+## 验证与下载校验
 
-- SiriRemoteCore's complete test suite passes, including brightness-action round trips, maintained
-  example mappings, exact hold boundaries and skipped-frame regressions.
-- The complete arm64 macOS App, microphone router, HAL plug-in and capture daemon build successfully.
-- Both public archives are checksum-verified, deep signature-verified, architecture-audited, and
-  scanned for private paths, device identifiers, personal configuration, PacketLogger and production
-  film assets.
-- The website passes desktop and phone browser checks with no console errors, broken resources or
-  horizontal overflow; reduced-motion content remains visible.
+- SiriRemoteCore 完整测试套件通过，包含亮度动作往返、默认映射、长按边界和跳帧回归。
+- arm64 应用、麦克风路由器、HAL 插件和采集服务构建成功；两个发布包通过校验和、深度签名、架构和隐私内容审计。
+- 网站通过桌面与手机浏览器检查，无控制台错误、失效资源或横向溢出；减少动态效果时内容仍可见。
 
-Use the attached `SHA256SUMS.txt` to verify the downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware, and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。

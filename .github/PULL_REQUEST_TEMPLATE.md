@@ -1,16 +1,16 @@
-## What changed
+## 改动内容
 
-<!-- And, more usefully: why was it wrong before? -->
+<!-- 更重要的是：之前哪里不对？ -->
 
-## How it was verified
+## 验证方式
 
-<!-- Be specific about which of these you actually did. Delete what you did not. -->
+<!-- 请具体说明你实际执行了哪些验证。删除未执行的项目。 -->
 
 - [ ] `swift test --package-path SiriRemoteCore`
 - [ ] `cd app && ./build.sh`
-- [ ] Ran it against a real Siri Remote (say which macOS version, and USB-C or Bluetooth)
-- [ ] Screenshotted the UI change
+- [ ] 使用真实 Siri Remote 运行（请注明 macOS 版本，以及 USB-C 或蓝牙连接方式）
+- [ ] 为界面改动提供截图
 
-## Notes for the reviewer
+## 给审阅者的备注
 
-<!-- Anything you are unsure about, or deliberately left out of scope. -->
+<!-- 哪些部分尚不确定，或有意不在本次改动范围内？ -->

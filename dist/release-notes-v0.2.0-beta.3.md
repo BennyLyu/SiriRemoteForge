@@ -1,72 +1,44 @@
 # SiriRemoteForge v0.2.0-beta.3
 
-This beta polishes HyperVibe's always-on status surface and completes the move to one portable,
-hot-reloading JSON configuration. The widget now preserves a readable layer identity in every
-state, uses materially connected element transitions, and adapts its contrast to the real macOS
-material behind it without screen capture permission.
+本版完善 HyperVibe 常驻状态界面，并将设置统一迁移到可移植、热重载的 JSON 配置。小组件在各种状态下都能清楚标识当前图层；动画衔接 macOS 原生材质，并根据底层外观调整对比度，无需屏幕录制权限。
 
-## Choose one download
+## 选择一个下载包
 
-- **App only:** `HyperVibe-0.2.0-beta.3-macOS-arm64.zip`
-  Unzip it, move `HyperVibe.app` to Applications, then right-click → **Open** once.
-- **Full Setup (advanced):** `HyperVibe-Full-Setup-0.2.0-beta.3-arm64.zip`
-  Includes HyperVibe, Siri Remote Mic, the on-demand voice-capture service, and
-  `HyperVibe Uninstall.app`. Installation asks for an administrator password, briefly restarts
-  system audio, and verifies `coreaudiod` with automatic plug-in rollback.
+- **仅应用：** `HyperVibe-0.2.0-beta.3-macOS-arm64.zip`。解压后将 `HyperVibe.app` 移至“应用程序”，然后右键点按并选择一次“打开”。
+- **完整安装（进阶）：** `HyperVibe-Full-Setup-0.2.0-beta.3-arm64.zip`。包含 HyperVibe、Siri Remote Mic、按需语音采集服务和 `HyperVibe Uninstall.app`。安装需管理员授权，会短暂重启系统音频，并通过 `coreaudiod` 检查及自动回滚验证插件。
 
-Both builds are ad-hoc signed and not Apple-notarized. They require macOS 13 or newer on Apple
-silicon and a third-generation USB-C Siri Remote.
+两个版本均为 ad-hoc 签名，未经 Apple 公证。需要 macOS 13 或更高版本、Apple 芯片和第三代 USB-C Siri Remote。
 
-## Highlights
+## 主要变化
 
-### A more legible, continuous status widget
+### 更清楚、连贯的状态小组件
 
-- Keeps a subtle, layer-coloured edge around the complete card in idle, action, hold, and voice
-  states, so the active layer remains identifiable without reading the label.
-- Keeps the card's physical size fixed. Transitions reconstruct only the icon and text, preventing
-  the surrounding layer aura from drifting or scaling separately from the material surface.
-- Turns each icon as one two-sided object through its vertical centre axis; text uses connected
-  glyph motion and a compact horizontal-axis fold instead of a blurred page replacement.
-- Synchronizes temporary animation snapshots with the permanent AppKit labels, removing the
-  one-frame weight, position, and brightness jump at transition completion.
-- Uses `NSVisualEffectView.interiorBackgroundStyle`, semantic label colours, and the effective
-  appearance to stay readable over both light and dark app content. No screen recording or screen
-  sampling is used.
-- Preserves the red live-recording dot while voice labels and waveform accents adapt to the current
-  material contrast.
+- 闲置、动作、长按和语音状态都显示与图层关联的边框颜色，方便识别当前图层。
+- 卡片物理尺寸保持不变；过渡只重建图标和文字，避免图层光晕相对材质漂移或缩放。
+- 图标作为整体绕垂直轴翻转，文字使用连续字形动画和水平折叠效果；临时动画快照与 AppKit 常驻标签同步，消除动画结束时的单帧跳动。
+- 根据 `NSVisualEffectView.interiorBackgroundStyle`、语义文字颜色和当前外观，自动确保浅色、深色背景下可读；不使用屏幕录制或采样。
+- 保留红色录音指示点，同时让语音文字和波形强调色适应材质对比度。
 
-### Every formal preference in `config.jsonc`
+### `config.jsonc` 管理所有正式设置
 
-- Adds JSON-backed `interfaceLanguage`, `launchAtLoginEnabled`, and `menuBarIconEnabled` settings.
-- Adds independent `layerHUDEnabled` and `dragIndicatorEnabled` switches alongside the existing
-  `statusWidgetEnabled`, `holdHUDEnabled`, and `findCursorEnabled` controls.
-- Adds `showSetupWizardOnFirstLaunch`; the one-time completion flag remains local to each Mac.
-- Applies language, Login Item registration, and every status-surface visibility change live, and
-  writes GUI changes back through the same atomic config save path.
-- Keeps only machine-local state outside portable JSON: the dragged widget position (which contains
-  a display ID) and whether that Mac has already completed onboarding.
-- Rejects unknown interface-language values instead of silently falling back.
+- 新增 JSON 设置：`interfaceLanguage`、`launchAtLoginEnabled`、`menuBarIconEnabled`、`layerHUDEnabled`、`dragIndicatorEnabled` 和 `showSetupWizardOnFirstLaunch`。
+- 设置界面语言、登录项注册和各状态面板的显隐都会立即生效，并通过同一原子写入路径更新配置。
+- 只有与本机有关的状态留在可移植配置之外：拖动后的小组件位置（包含显示器 ID）和此 Mac 是否完成首次设置。
+- 不接受未知的界面语言值，避免静默回退。
 
-## Microphone note
+## 麦克风说明
 
-Remote Bluetooth voice capture additionally needs Apple's PacketLogger from
-[*Additional Tools for Xcode*](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode).
-PacketLogger is not bundled. The main app and built-in-microphone fallback remain usable without it.
+遥控器蓝牙语音采集还需要从 [Xcode Additional Tools](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode) 获取 Apple 的 PacketLogger。项目不附带 PacketLogger；没有它时，主应用和内置麦克风回退仍可使用。
 
-## Verification
+## 验证与下载校验
 
-- 125 SiriRemoteCore tests passed, including JSON defaults, overrides, validation, and stable
-  write-back for the new interface settings.
-- The complete arm64 macOS app build passed and the stable local development build was restarted.
-- Release archives are checksum-verified, signature-verified, architecture-audited, and scanned for
-  private paths, device identifiers, personal configuration, PacketLogger, and production media.
+- SiriRemoteCore 的 125 项测试通过，包含新界面设置的 JSON 默认值、覆盖、校验和稳定写回。
+- arm64 macOS 应用构建通过。发布包已校验校验和、签名和架构，并检查是否包含私有路径、设备标识、个人配置、PacketLogger 或正式媒体素材。
 
-Use the attached `SHA256SUMS.txt` to verify the downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware, and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。

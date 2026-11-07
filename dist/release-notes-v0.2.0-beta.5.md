@@ -1,107 +1,55 @@
 # SiriRemoteForge v0.2.0-beta.5
 
-This beta is a complete redesign of HyperVibe's installation, first-run and recovery experience.
-It adds a native macOS Installer, rebuilds the old narrow setup walkthrough into a polished live
-System Check, and makes permission health visible throughout the App without spraying prompts
-across startup.
+本版全面重做 HyperVibe 的安装、首次启动和恢复流程：新增 macOS 原生安装器、实时“系统检查”以及贯穿应用的权限状态提示，减少启动时反复弹出的授权窗口。
 
-## Choose one download
+## 选择一个下载包
 
-- **Native Full Installer (recommended):**
-  `HyperVibe-Full-Setup-0.2.0-beta.5-arm64.pkg`
-  Installs HyperVibe, Siri Remote Mic, the on-demand voice-capture service and
-  `HyperVibe Uninstall.app` with one administrator approval. It briefly restarts system audio,
-  verifies `coreaudiod` for 25 seconds with automatic rollback, then opens System Check.
-- **App only:** `HyperVibe-0.2.0-beta.5-macOS-arm64.zip`
-  Unzip it, move `HyperVibe.app` to Applications, then Control-click → **Open** once.
-- **Legacy Full Setup:** `HyperVibe-Full-Setup-0.2.0-beta.5-arm64.zip`
-  Retained for users who cannot use the package. It now finishes in the same System Check instead
-  of opening a sequence of blind System Settings dialogs.
+- **原生完整安装器（推荐）：** `HyperVibe-Full-Setup-0.2.0-beta.5-arm64.pkg`。一次管理员授权即可安装 HyperVibe、Siri Remote Mic、按需语音采集服务和卸载器；安装后短暂重启系统音频，监控 `coreaudiod` 25 秒并在失败时回滚，然后打开“系统检查”。
+- **仅应用：** `HyperVibe-0.2.0-beta.5-macOS-arm64.zip`。解压后将 `HyperVibe.app` 移至“应用程序”，再按住 Control 点按并选择一次“打开”。
+- **旧版完整安装包：** `HyperVibe-Full-Setup-0.2.0-beta.5-arm64.zip`。供无法使用安装器的用户使用，完成后同样进入“系统检查”。
 
-These beta artifacts are not Apple-notarized. The App bundles are ad-hoc signed and this beta's
-native package is unsigned because the project does not yet have a Developer ID Installer
-certificate. Control-click the downloaded package and choose **Open**; never disable Gatekeeper
-globally. HyperVibe requires macOS 13 or newer on Apple silicon and a third-generation USB-C Siri
-Remote.
+这些测试版未经 Apple 公证；应用为 ad-hoc 签名，原生安装包未签名，因为项目尚无 Developer ID Installer 证书。首次打开时按住 Control 点按并选择“打开”；不要全局关闭 Gatekeeper。需要 macOS 13 或更高版本、Apple 芯片和第三代 USB-C Siri Remote。
 
-## Native, recoverable installation
+## 可恢复的原生安装
 
-- Uses Apple's standard Installer UI with bilingual welcome, install detail, license and completion
-  pages.
-- Verifies the sealed payload and nested App signatures before replacing installed software.
-- Preserves an existing `~/.config/siriremote/config.jsonc`; a public default is created only when
-  the active user has no configuration, without following config symlinks or recursively changing
-  ownership inside the user's home.
-- Backs up the existing HyperVibe App, uninstaller, HAL driver, microphone services and LaunchDaemon
-  and restores the complete previous set if installation or the audio watchdog fails. The installer
-  stops only the HyperVibe UI, never HyperVibe Host.
-- Writes installation diagnostics to `/var/log/hypervibe-install.log` and leaves a native
-  uninstaller in Applications.
+- 使用 Apple 标准安装界面，含双语欢迎、安装详情、许可和完成页面。
+- 替换软件前验证封装内容和应用内嵌签名。
+- 保留现有 `~/.config/siriremote/config.jsonc`；只有当前用户没有配置时才创建默认配置。不跟随配置符号链接，也不递归更改用户主目录内文件的所有权。
+- 先备份应用、卸载器、HAL 驱动、麦克风服务和 LaunchDaemon；安装或音频监控失败时恢复完整旧版本。安装器只停止 HyperVibe UI，不会停止 HyperVibe Host。
+- 安装诊断写入 `/var/log/hypervibe-install.log`，并在“应用程序”中放置原生卸载器。
 
-## Redesigned setup and recovery UI
+## 重做首次设置与恢复界面
 
-- Replaces the old compact sequence of modal instructions with a spacious native macOS window:
-  760 × 680 points by default, responsively resizable from 700 × 620 to 1100 × 900, with only the
-  feature list scrolling instead of allowing the entire window to grow beyond the display.
-- Organises setup into five purposeful chapters — language, core control access, voice and advanced
-  actions, live remote connection, and final readiness — with segmented progress and restrained
-  220 ms directional transitions between pages.
-- Introduces a consistent visual system of hierarchical SF Symbols, semantic green/orange/red
-  status badges, rounded capability cards, clear explanatory copy and dedicated action/settings
-  controls. Required and optional capabilities can now be distinguished at a glance.
-- Adds a real summary dashboard for install location, core permissions, Siri Remote connection and
-  remote voice readiness, plus launch-at-login control and any registration error in the same view.
-- Makes the window safely closable and deferable while preventing an incomplete required setup from
-  being marked Done. Language choice and completed state are remembered, so returning users resume
-  at the relevant health checks instead of repeating onboarding.
-- Adds complete English and Simplified Chinese copy for every new state, explanation and recovery
-  action. The native Installer's welcome, contents and completion pages are bilingual as well.
+- 使用空间充足的原生窗口，默认 760×680 点，可在 700×620 至 1100×900 点之间调整；只有功能列表滚动，避免窗口超出屏幕。
+- 设置分为五部分：语言、核心控制权限、语音与高级动作、实时遥控器连接、最终就绪状态；显示分段进度和方向一致的页面转场。
+- 使用 SF Symbols、绿/橙/红状态标识、能力卡片和专用操作/设置按钮区分必需与可选能力。
+- 汇总安装位置、核心权限、遥控器连接和语音状态，并显示登录时启动控制及注册错误。
+- 窗口可关闭或稍后继续；必需设置未完成时不能标为完成。语言和完成状态会被记住，回访用户从相关检查继续。
+- 新界面和安装器页面均提供英文与简体中文。
 
-## One live System Check
+## 实时系统检查
 
-- Separates the two core permissions — Accessibility and Input Monitoring — from optional,
-  feature-specific capabilities such as Microphone and Automation.
-- Checks Siri Remote Mic components, Apple's separately distributed PacketLogger, remote connection,
-  install location and launch-at-login state in one place.
-- Requests privacy access only after the user clicks the matching action. Ordinary startup performs
-  passive checks and no longer triggers unexplained TCC prompts.
-- Refreshes status automatically after returning from System Settings. Granting Accessibility or
-  Input Monitoring reattaches the affected event tap or HID manager immediately; no App restart is
-  needed.
-- Remains available from a new **Open System Check…** item in both the menu bar and Settings, or via
-  `HyperVibe --system-check` for diagnostics and support workflows.
-- Adds a persistent **Permissions: Ready** / **Permissions: Action needed** line to the menu bar.
-  When action is needed, the status itself is clickable and opens the exact recovery surface.
-- Detects a later permission revocation on launch instead of silently leaving pointer or button
-  control broken. Normal health polling remains passive and never causes a TCC dialog by itself.
+- 将核心权限 Accessibility、Input Monitoring 与按功能启用的 Microphone、Automation 区分开。
+- 在一处检查 Siri Remote Mic 组件、Apple 单独分发的 PacketLogger、遥控器连接、安装位置和登录项状态。
+- 只有用户点按相应操作时才请求隐私权限；普通启动只做被动检查，不触发无说明的 TCC 请求。
+- 从系统设置返回后自动刷新状态；授权 Accessibility 或 Input Monitoring 后立即重新连接受影响的事件监听器或 HID 管理器，无需重启应用。
+- 可从菜单栏、设置中的“打开系统检查…”或 `HyperVibe --system-check` 打开；菜单栏持续显示“权限：就绪/需要操作”，需要处理时可点按状态跳转到对应页面。
+- 启动时可发现后来被撤销的权限。正常状态轮询始终是被动的，不会自行触发 TCC 对话框。
 
-## Microphone note
+## 麦克风说明
 
-Remote Bluetooth voice capture additionally needs Apple's PacketLogger from
-[*Additional Tools for Xcode*](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode).
-Apple does not permit redistributing it, so it is not bundled. System Check reports whether it is
-installed and links to Apple's download; pointer, scrolling, buttons and built-in-microphone
-fallback remain available without it.
+遥控器蓝牙语音采集还需要从 [Xcode Additional Tools](https://developer.apple.com/download/all/?q=Additional+Tools+for+Xcode) 获取 Apple 的 PacketLogger。Apple 不允许重新分发，因此项目不附带。系统检查会显示其安装状态并提供下载链接；即使没有 PacketLogger，指针、滚动、按键和内置麦克风回退仍可使用。
 
-## Verification
+## 验证与下载校验
 
-- SiriRemoteCore passes all 129 tests.
-- The complete arm64 App, microphone router, HAL plug-in and capture daemon build successfully for
-  macOS 13 or newer.
-- All three binary downloads are checksum-verified. Release audit expands the native package and
-  both archives, verifies nested signatures and the payload seal, checks Installer XML and scripts,
-  compares package/App binaries byte-for-byte, and rejects personal configuration, PacketLogger,
-  device identifiers, private paths or production media.
-- A stable-signed local build was installed and restarted separately without changing the existing
-  Accessibility or Input Monitoring identity; HID detection and the media-key event tap reattached
-  successfully.
+- SiriRemoteCore 的 129 项测试通过；arm64 应用、麦克风路由器、HAL 插件和采集服务可在 macOS 13+ 构建。
+- 三个下载文件已校验校验和。发布审计展开安装包和压缩包，检查内嵌签名、封装内容、安装器脚本和 XML、应用二进制一致性，并排除个人配置、PacketLogger、设备标识、私有路径和正式媒体素材。
+- 单独安装并重启稳定签名的本地构建后，原有 Accessibility/Input Monitoring 身份未改变，HID 检测和媒体键事件监听器均重新连接成功。
 
-Use the attached `SHA256SUMS.txt` to verify the downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。

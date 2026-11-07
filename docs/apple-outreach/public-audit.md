@@ -1,76 +1,54 @@
-# Public claims and send audit
+# 公开说法与发送前审计
 
-## Claims that are supported by the current public project
+## 当前公开项目能够支持的说法
 
-| Claim | Evidence in the project | Approved wording |
+| 说法 | 项目证据 | 建议表述 |
 | --- | --- | --- |
-| Touch surface controls the pointer | `TouchHandler`, current Tuning UI, public README | "Pointer movement with tunable acceleration" |
-| Ring scrolling has acceleration | independent circular-scroll curve and current Tuning capture | "Accelerated circular scrolling with an independent curve" |
-| Vertical and horizontal ring scrolling | configuration and Layer behavior | "The same ring can scroll vertically or horizontally by context" |
-| Rich button gestures | tap/double/triple plus three hold stages | "Up to six configured intents on one input" |
-| App and Layer context | app-mode resolver and 1-10 layer loop | "App x Layer mappings" |
-| Persistent visual feedback | compact widget, hold HUD, layer HUD, current videos | "Current action, layer, hold progress, and voice state remain visible" |
-| Remote voice path exists | virtual device/router/capture pipeline and installer | "Experimental remote voice capture with built-in mic fallback" |
-| Agent-friendly configuration | hot-reloaded JSONC and GUI write-back | "GUI, scripts, and agents share one configuration" |
-| Current build quality | public release audit and current-tree tests | "Public beta, native installer, release audits, and 130/130 tests in the current reviewed tree" |
+| 触控表面可控制指针 | `TouchHandler`、当前 Tuning 界面、公开 README | “指针移动，带可调加速” |
+| 圆环滚动带加速 | 独立的圆形滚动曲线和当前 Tuning 截图 | “带独立曲线的加速圆形滚动” |
+| 圆环可竖向和横向滚动 | 配置和图层行为 | “同一圆环可根据上下文竖向或横向滚动” |
+| 丰富的按键手势 | 轻点/双击/三击和三阶段长按 | “一个输入最多可配置六种操作意图” |
+| 应用和图层上下文 | 应用模式解析器和 1–10 层循环 | “应用 × 图层映射” |
+| 常驻视觉反馈 | 精简小组件、长按 HUD、图层 HUD 和当前录屏 | “当前操作、图层、长按进度和语音状态始终可见” |
+| 遥控器语音路径已存在 | 虚拟设备/路由器/采集管线和安装器 | “实验性遥控器语音采集，带内置麦克风回退” |
+| 配置适合代理操作 | 热重载 JSONC 和图形界面写回 | “图形界面、脚本和代理共用同一份配置” |
+| 当前构建质量 | 公开版本审计和当前代码树测试 | “已发布公开 Beta、原生安装器和版本审计；当前已审阅代码树的 130 项测试全部通过” |
 
-## Claims that must stay qualified
+## 必须加限定的说法
 
-- **Microphone:** always call the remote path experimental. State that it uses an undocumented
-  Bluetooth voice path and separately obtained Apple diagnostics tooling. Do not imply that it is a
-  supported CoreAudio accessory.
-- **Distribution:** say that the current proof of concept uses private/undocumented behavior and is
-  distributed directly. Do not claim that Apple has rejected it or that an App Store path is
-  categorically impossible forever.
-- **Existing API surface:** acknowledge that Game Controller documents a Siri Remote profile and a
-  second-generation Remote example for Apple TV. The observed request is specifically the complete
-  paired third-generation Remote input surface on macOS, plus a supported audio route.
-- **Accessibility:** describe concrete alternative-input and mobility use cases. Do not claim
-  clinical outcomes, certification, user-study results, or endorsement by disabled users without
-  evidence.
-- **Performance:** use qualitative language for acceleration and responsiveness unless a public,
-  repeatable benchmark is attached.
-- **Test count:** the current reviewed tree passes 130/130 tests; beta.5's public notes correctly
-  record the 129/129 suite that existed when that release was cut. Do not attribute the later count
-  to the older release.
-- **Agent operation:** say that agents can edit the same configuration. Do not imply that an agent
-  controls private user data or can bypass macOS permissions.
+- **麦克风：**遥控器语音路径一律称为实验功能。说明它使用未公开的蓝牙语音路径，以及需要单独获取的 Apple 诊断工具。不要暗示这是受支持的 CoreAudio 配件。
+- **分发：**说明当前概念验证依赖私有/未公开行为，并采用直接分发。不要声称 Apple 已拒绝此方案，或 App Store 永远不可能接受它。
+- **现有 API：**承认 Game Controller 已记录 Siri Remote 配置文件，并给出第二代遥控器用于 Apple TV 的示例。当前请求仅针对 macOS 上已配对的第三代遥控器的完整输入，以及受支持的音频路径。
+- **无障碍：**描述具体的替代输入和行动辅助使用场景。没有证据时，不要声称临床成效、认证、用户研究结果，也不要暗示残障用户已认可。
+- **性能：**除非附有公开且可复现的基准数据，否则对加速和响应速度只作定性描述。
+- **测试数量：**当前已审阅代码树的 130/130 项测试通过；beta.5 发布说明准确记录了该版本发布时的 129/129 项测试。不要把后来增加的数量归到旧版本上。
+- **代理操作：**可以说代理能够编辑同一份配置；不要暗示代理能控制私人用户数据或绕过 macOS 权限。
 
-## Wording to remove or avoid
+## 应删除或避免的措辞
 
-- Hardware material claims such as "glass". The software only needs to describe the **touch
-  surface** or **clickpad**.
-- "Can never ship on the App Store." Replace with the precise current limitation: private input
-  behavior, undocumented remote voice, Accessibility/Input Monitoring, and the need for a supported
-  sandbox/entitlement path.
-- "Apple-quality," "official," "Apple approved," or language that could imply affiliation.
-- "SOTA microphone," "zero latency," "works everywhere," or "replaces every input device."
-- Any confidential roadmap, API key, packet capture containing identifiers, private Tailnet URL, or
-  personal desktop recording.
+- 关于硬件材质的说法，例如“玻璃”。软件只需描述**触控表面**或**点击板**。
+- “永远无法上 App Store”。应准确描述当前限制：私有输入行为、未公开的遥控器语音、辅助功能/输入监控授权，以及缺少受支持的沙盒/entitlement 路径。
+- “Apple 品质”“官方”“Apple 认可”等可能让人误以为存在关联的措辞。
+- “最先进的麦克风”“零延迟”“到处都能用”或“替代所有输入设备”。
+- 任何保密路线图、API 密钥、包含设备标识的数据包、私人 Tailnet URL 或个人桌面录屏。
 
-## Apple submission posture
+## 向 Apple 提交材料的立场
 
-Apple's [Unsolicited Idea Submission Policy](https://www.apple.com/legal/intellectual-property/policies/ideas.html)
-says not to send unsolicited proprietary ideas and treats submitted feedback as non-confidential.
-Accordingly:
+Apple 的[未邀约创意提交政策](https://www.apple.com/legal/intellectual-property/policies/ideas.html)建议不要发送未邀约的专有创意，并将收到的反馈视为非保密材料。因此：
 
-- present HyperVibe as an already public implementation and a concrete report about existing Apple
-  products and missing developer API support;
-- ask for review, routing, and supported APIs rather than acquisition, compensation, secrecy, or
-  ownership of an idea;
-- keep each API enhancement in its own Feedback Assistant report; and
-- send only material that is already public or intentionally non-confidential.
+- 将 HyperVibe 作为已有的公开实现，以及针对现有 Apple 产品和缺少开发者 API 支持提出的具体反馈；
+- 请求审阅、转交到适当团队并提供受支持的 API，不要请求收购、报酬、保密或创意所有权；
+- 每项 API 增强分别提交到一份 Feedback Assistant 报告；
+- 只发送已经公开或明确作为非保密材料提供的内容。
 
-## Final public-page checks
+## 公开演示页最终检查
 
-- The first screen identifies the product and working interaction without a giant generic slogan.
-- Every native clip uses the latest capture, is muted, loops, and has a meaningful still state.
-- Pointer, ring, drag, gestures, App x Layer, voice, curves, and Agent configuration all appear.
-- The page says "touch surface," not "glass."
-- Browser Back timing shows `Delete -> Back at 0.5 s -> Close at 1.0 s -> Quit at 1.7 s`.
-- Public source and Release links work while signed out.
-- `PUBLIC_DEMO_URL`, `INPUT_FEEDBACK_ID`, and `AUDIO_FEEDBACK_ID` are replaced, and the recorded OS,
-  Xcode, and SDK versions are reconfirmed before submission.
-- Both `PublicAPIProbe` executables are rebuilt on the reported environment, and their console output
-  is scrubbed before attachment.
-- The email carries one PDF attachment only; diagnostics go through Feedback Assistant.
+- 首屏清楚说明产品和实际交互，避免夸张的通用口号。
+- 所有原生录屏都使用最新素材、静音播放、循环流畅，并提供有意义的静态画面。
+- 展示指针、圆环、拖动、手势、应用 × 图层、语音、曲线和代理配置。
+- 页面写“触控表面”，不要写“玻璃”。
+- 浏览器返回键时间线显示 `Delete → 0.5 秒 Back → 1.0 秒 Close → 1.7 秒 Quit`。
+- 未登录时也能打开公开源码和 Release 链接。
+- 提交前替换 `PUBLIC_DEMO_URL`、`INPUT_FEEDBACK_ID` 和 `AUDIO_FEEDBACK_ID`，并重新确认记录的操作系统、Xcode 和 SDK 版本。
+- 在所述环境中重新构建两个 `PublicAPIProbe` 可执行程序，并在附加前清理其控制台输出。
+- 邮件只附一份 PDF；诊断材料通过 Feedback Assistant 提交。

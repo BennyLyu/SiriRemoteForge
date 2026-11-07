@@ -1,120 +1,95 @@
-# HyperVibe - 60-second Apple review film
+# HyperVibe——60 秒 Apple 审阅演示片
 
-**Format:** 16:9, 4K master, 60 fps, English on-screen copy, animation and clean product capture only.
-**Restrictions:** no hand footage, no macro photography, no personal desktop, no spoken confidential
-information. Every native UI segment loops cleanly on the public page.
-**Rhythm:** fast but readable; interaction beats land in 180-280 ms, while each chapter gets enough
-hold time to understand the result.
+**规格：**16:9、4K 母版、60 fps；画面文字使用英文；只用动画和干净的产品录屏。
+**限制：**不拍手部、不做微距、不出现个人桌面、不说出保密信息。所有原生 UI 片段都能在公开页面上无缝循环。
+**节奏：**节奏明快但可读；交互动作控制在 180–280 ms，每个章节留出足够时间让观众看懂结果。
 
-## Timeline
+## 时间轴
 
-### 00:00-00:04 - The broken workflow
+### 00:00–00:04——流程中断
 
-**Picture:** A prompt completes in a minimal coding window. The caret stops. Three required actions -
-`SCROLL`, `SELECT`, `VERIFY` - appear beyond the prompt as inactive nodes. A mouse and trackpad outline
-briefly enter, showing the extra-device break without presenting a giant slogan.
+**画面：**极简代码窗口中的提示刚完成。光标停住。提示之外出现 `SCROLL`、`SELECT`、`VERIFY` 三个未激活节点。鼠标和触控板轮廓短暂出现，表现需要额外设备的断点，但不要使用夸张口号。
 
-**Copy:** `Voice starts the interaction. It does not finish it.`
+**字幕：**`语音开启了交互，却无法完成整个流程。`
 
-**Transition:** The three inactive nodes collapse along curved paths into three points on the Siri
-Remote ring. The remote is already present in the next scene; nothing cuts to a new slide.
+**转场：**三个未激活节点沿弧线收拢，变成 Siri Remote 圆环上的三个点。遥控器已经出现在下一场景中，不切换到新的幻灯片。
 
-### 00:04-00:10 - Pointer movement
+### 00:04–00:10——指针移动
 
-**Picture:** A fingertip signal point moves over the rendered touch surface. A cursor crosses a real
-Mac layout at two speeds. The acceleration graph draws under it: slow movement stays precise; a fast
-flick climbs the curve and covers the display.
+**画面：**手指信号点在渲染的触控表面上移动。光标以两种速度掠过真实 Mac 布局。下方绘出加速曲线：慢速移动保持精准，快速滑动沿曲线加速并覆盖整个显示器。
 
-**Copy:** `TOUCH -> POINTER` / `TUNABLE ACCELERATION`
+**字幕：**`触控 → 指针` / `加速可调`
 
-**Transition:** The cursor path bends into a circle and becomes the active outer-ring trace.
+**转场：**光标轨迹弯成圆形，成为活动的外圈轨迹。
 
-### 00:10-00:16 - Accelerated ring scrolling
+### 00:10–00:16——加速圆环滚动
 
-**Picture:** The ring trace completes one slow partial turn and one faster turn. Real content moves
-vertically, then the Layer color rolls once and the same motion becomes horizontal album scrolling.
-The gain curve responds continuously instead of resetting.
+**画面：**圆环轨迹先缓慢旋转一小段，再加速旋转一圈。真实内容向下滚动一次；随后图层颜色滚动切换，同样的动作变成横向专辑滚动。增益曲线连续响应，不重置。
 
-**Copy:** `ONE RING. VERTICAL OR HORIZONTAL.`
+**字幕：**`同一个圆环，竖向或横向滚动。`
 
-**Transition:** The moving content decelerates into a selected card. Its outline becomes the drag
-target.
+**转场：**滚动内容减速并停在一张卡片上，卡片轮廓变为拖动目标。
 
-### 00:16-00:22 - Click and sticky drag
+### 00:16–00:22——点击与锁定拖动
 
-**Picture:** Hold begins. At 0.18 seconds the whole compact widget starts showing progress; at 0.50
-seconds the center action becomes Drag. The card follows the pointer. Release ends the drag
-immediately and the status surface returns to the current Layer.
+**画面：**开始按住。0.18 秒时，整个精简小组件开始显示进度；0.50 秒时，中心动作变为拖动。卡片跟随光标。松开后拖动立即结束，状态界面回到当前图层。
 
-**Copy:** `0.18 s FEEDBACK` / `0.50 s DRAG`
+**字幕：**`0.18 秒反馈` / `0.50 秒开始拖动`
 
-**Transition:** The progress surface divides into a five-beat gesture timeline.
+**转场：**进度界面分成五拍手势时间轴。
 
-### 00:22-00:30 - Gesture grammar
+### 00:22–00:30——手势组合
 
-**Picture:** One Back button remains fixed while its consequences animate around it: Tap, Double,
-Triple, Hold 1, Hold 2, Hold 3. Then show the real Browser ladder as a continuous timeline:
-`Delete -> Back -> Close Window -> Quit App`. The selected face and water/progress boundary move on
-the same tick.
+**画面：**返回键保持不动，周围依次出现它对应的操作：轻点、双击、三击、长按 1、长按 2、长按 3。随后展示浏览器中的真实分级操作：`Delete → Back → Close Window → Quit App`。选中操作界面和水波/进度边界按同一个时钟变化。
 
-**Copy:** `ONE CONTROL. UP TO SIX INTENTS.`
+**字幕：**`一个控制键，最多六种操作。`
 
-**Transition:** Each gesture outcome folds into one row of the native Layout window.
+**转场：**每种手势操作折叠成原生 Layout 窗口中的一行。
 
-### 00:30-00:38 - App x Layer
+### 00:30–00:38——应用 × 图层
 
-**Picture:** Use the real Layout page. Chrome, Music, and Terminal move across the App hub while the
-Layer selector rolls through three named colors. The same ring-left input resolves to Tab, Desktop,
-and Arrow without moving the physical control. End on the compact widget's layer reconstruction
-animation.
+**画面：**使用真实 Layout 页面。Chrome、Music 和 Terminal 在应用中心切换；图层选择器依次切换三种颜色。同一个圆环左键输入，分别映射为切换标签页、切换桌面和方向键，物理按键没有变化。最后展示精简小组件的图层重建动画。
 
-**Copy:** `APP x LAYER` / `CONTEXT, NOT MORE BUTTONS`
+**字幕：**`应用 × 图层` / `按上下文变化，而不是增加按键`
 
-**Transition:** The colored layer edge becomes the baseline of the voice console.
+**转场：**彩色图层边缘变成语音控制台的基线。
 
-### 00:38-00:46 - Voice as a real state
+### 00:38–00:46——语音是一种真实状态
 
-**Picture:** The side-button indicator turns red. The icon face unfolds into the current 25-bar
-voice console. Loudness history changes bar height; relative pitch, confidence, and spectral
-brightness color the signal. Release folds the waveform back into the exact current Layer face.
+**画面：**侧边键指示灯变红。图标展开为当前 25 根柱状条组成的语音控制台。音量历史改变柱高；相对音高、置信度和频谱亮度改变信号颜色。松开后波形折回当前图层界面。
 
-**Copy:** `REMOTE VOICE` / `BUILT-IN MIC FALLBACK`
+**字幕：**`遥控器语音` / `内置麦克风自动回退`
 
-**Transition:** The 25 bars straighten into JSON lines.
+**转场：**25 根柱状条拉直，变成 JSON 行。
 
-### 00:46-00:53 - Agent-friendly configuration
+### 00:46–00:53——方便代理操作的配置
 
-**Picture:** A coding agent changes one JSONC mapping and one acceleration control. The native GUI
-updates and reports `Auto-saved`; the active action changes without an app restart. Keep the file,
-GUI, and resulting controller state connected by one animated line.
+**画面：**编程代理修改一条 JSONC 映射和一个加速参数。原生图形界面更新并显示 `Auto-saved`；当前操作立即生效，无需重启应用。用一条动画线连接文件、图形界面和控制器状态。
 
-**Copy:** `ONE SOURCE OF TRUTH` / `GUI + SCRIPT + AGENT`
+**字幕：**`单一事实来源` / `图形界面 + 脚本 + 代理`
 
-**Transition:** The line extends beyond the Mac window and becomes a stage mark.
+**转场：**这条线伸出 Mac 窗口，变成舞台标记线。
 
-### 00:53-00:58 - Why this matters
+### 00:53–00:58——这为何重要
 
-**Picture:** Two compact scenario frames share the screen. Left: a standing presenter controls a
-live Mac demo from away from the desk, represented with clean silhouettes and screen animation.
-Right: a voice-assisted coding flow continues through scroll, select, and approve without a mouse
-entering the chain.
+**画面：**左右并排显示两个精简场景。左侧：演讲者离开桌边，用遥控器操作正在运行的 Mac 演示，画面用简洁剪影和屏幕动画表达。右侧：语音辅助编程继续完成滚动、选择和确认，整个流程无需鼠标加入。
 
-**Copy:** `STAY IN THE ROOM.` / `STAY IN THE FLOW.`
+**字幕：**`留在现场。` / `保持流程不断。`
 
-**Transition:** Both scenario frames compress into the two requested API symbols: input and audio.
+**转场：**两个场景压缩成两枚 API 图标：输入与音频。
 
-### 00:58-01:00 - The concrete ask
+### 00:58–01:00——明确请求
 
-**Picture:** HyperVibe icon, remote silhouette, repository URL, and two restrained labels.
+**画面：**HyperVibe 图标、遥控器剪影、仓库地址和两个克制的标签。
 
-**Copy:** `A WORKING PUBLIC PROOF OF CONCEPT`
-`REQUEST: SUPPORTED macOS INPUT + AUDIO APIs`
+**字幕：**`已运行的公开概念验证`
+`请求：受支持的 macOS 输入与音频 API`
 
-No generic end-card claim. End on the product and the specific platform request.
+不要使用通用结束语。以产品和具体平台请求收尾。
 
-## Sound
+## 声音
 
-- 118-124 BPM electronic bed with clean transients, no cinematic boom.
-- One quiet tactile tick for button boundaries; one soft velocity swell for pointer/ring gain.
-- Voice chapter uses abstract, non-linguistic recorded phonemes only.
-- Mix must still communicate when muted; all meaning lives in motion and text.
+- 118–124 BPM 的电子音乐，瞬态清晰，不用电影式重低音。
+- 按键边界配一个轻柔触感提示音；指针/圆环增益配一个柔和的速度渐强声。
+- 语音章节只使用抽象、无语义的录音音节。
+- 静音时仍必须能看懂；所有信息由动态画面和字幕传达。

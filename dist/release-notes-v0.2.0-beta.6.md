@@ -1,132 +1,68 @@
 # SiriRemoteForge v0.2.0-beta.6
 
-> **One-time manual upgrade:** beta.5 and earlier do not contain the updater, so they cannot discover
-> beta.6 automatically. Install beta.6 once from this Release. From beta.6 onward, HyperVibe can
-> discover and download authenticated app-only updates automatically.
+> **首次需手动升级：** beta.5 及更早版本没有更新器，无法自动发现 beta.6。请从本次 Release 手动安装一次 beta.6；之后 HyperVibe 即可自动发现并下载经过认证的仅应用更新。
 
-This beta turns HyperVibe into a much more complete input and presentation system. It introduces
-native low-latency voice-to-text, a global External / Final / Live voice switch, a dedicated Voice
-capsule, richer state-aware motion, the floating presentation remote, GUI shortcut capture, and the
-first authenticated automatic-update channel.
+本版将 HyperVibe 扩展为更完整的输入与呈现系统：新增低延迟原生语音转文字、全局 External / Final / Live 语音切换、专用语音卡片、状态动画、悬浮演示遥控器、图形界面快捷键录制，以及首个经过认证的自动更新通道。
 
-## Choose one download
+## 选择一个下载包
 
-- **Native Full Installer (recommended for a first installation):**
-  `HyperVibe-Full-Setup-0.2.0-beta.6-arm64.pkg`
-  Installs HyperVibe, Siri Remote Mic, the on-demand voice-capture service and the uninstaller with
-  one administrator approval.
-- **App only (recommended for an existing installation):**
-  `HyperVibe-0.2.0-beta.6-macOS-arm64.zip`
-  Replaces only `HyperVibe.app`; it does not modify the optional microphone stack.
-- **Legacy Full Setup:** `HyperVibe-Full-Setup-0.2.0-beta.6-arm64.zip`
-  Retained for systems where the native package cannot be used.
+- **原生完整安装器（首次安装推荐）：** `HyperVibe-Full-Setup-0.2.0-beta.6-arm64.pkg`。一次管理员授权即可安装 HyperVibe、Siri Remote Mic、按需语音采集服务和卸载器。
+- **仅应用（已有安装推荐）：** `HyperVibe-0.2.0-beta.6-macOS-arm64.zip`。只替换 `HyperVibe.app`，不修改可选麦克风组件。
+- **旧版完整安装包：** `HyperVibe-Full-Setup-0.2.0-beta.6-arm64.zip`，适用于无法使用原生安装包的系统。
 
-These beta artifacts are not Apple-notarized. The App bundles are ad-hoc signed and the native
-package is unsigned because the project does not yet have Developer ID distribution certificates.
-Control-click the download and choose **Open** once; never disable Gatekeeper globally. HyperVibe
-requires macOS 13 or newer on Apple silicon.
+测试版未经 Apple 公证；应用为 ad-hoc 签名，原生安装包未签名，因为项目尚无 Developer ID 分发证书。首次打开时按住 Control 点按并选择“打开”；不要全局关闭 Gatekeeper。需要 macOS 13 或更高版本和 Apple 芯片。
 
-## Native Voice: fast Final and true Live output
+## 原生语音：快速 Final 与实时 Live
 
-- Adds App-native speech-to-text driven by the remote side button. Capture starts on the physical
-  press edge, cloud connections are pre-warmed, credentials are cached outside the button hot path,
-  and sub-one-second accidental recordings are discarded locally.
-- Adds one global Voice mode on every Layer. Hold **Mute** and tap **Side** to cycle External,
-  Final and Live without changing Layer. The switch is intentionally silent and both the persistent
-  widget and temporary Voice capsule animate to the new state.
-- **Live** streams real transcript deltas directly to the captured caret and skips the polishing
-  round trip. **Final** transcribes the completed utterance, applies the personal dictionary,
-  optionally performs a constrained cleanup with OpenAI or DeepSeek, and inserts once.
-- Strengthens cleanup prompts and validates the response so a model cannot answer the dictated
-  message instead of editing it. Unsafe or failed rewrites fall back to the dictionary-corrected
-  transcript.
-- Captures the original editor before opening any HUD, refuses secure fields, attempts direct
-  Accessibility insertion, falls back to compatibility paste, and finally copies when a target
-  cannot accept text. Double-click Side can recover the previous dictation.
-- Adds a friendly dictionary editor plus JSONC parity for canonical terms and recognition aliases.
-  Model selection, language hints, delivery behaviour, recording limits, feedback and presentation
-  remain configurable.
-- Adds matched short Sci-fi start/stop cues. The stop cue begins only after capture closes, so it
-  cannot leak into the transcript. Both the cue and its volume can be disabled or adjusted.
+- 通过遥控器侧边键触发应用内语音转文字。实体按下时立即开始采集，预热云端连接，凭据缓存不进入按键响应路径；短于一秒的误触录音在本地丢弃。
+- 所有图层共享一个语音模式。按住 Mute 并点按 Side，可在 External、Final 和 Live 间切换，不改变当前图层。切换不发提示音，常驻小组件和临时语音卡片会同步更新。
+- **Live** 将实时转录增量直接写入按键开始时定位的插入点，不做润色请求。**Final** 在录音结束后转录、应用个人词典，可选用 OpenAI 或 DeepSeek 做受限清理，然后一次性插入。
+- 加强并校验清理提示，避免模型回答听写内容而非整理文本；改写不安全或失败时回退到已按词典修正的转录文本。
+- 在显示 HUD 前捕获原始编辑器，拒绝安全输入框；优先使用 Accessibility 插入，再尝试兼容性粘贴，无法写入时复制结果。双击 Side 可取回上一条听写。
+- 新增词典编辑器，并支持 JSONC 中的标准词条和识别别名。模型、语言提示、交付方式、录音时长、反馈提示音和界面均可配置。
+- 新增配对的科幻风格开始/结束提示音；结束提示音在采集停止后才播放，不会进入转录。提示音和音量都可以关闭或调整。
 
-## Voice UI with truthful acoustic detail
+## 提供真实声学反馈的语音界面
 
-- Adds a separate, draggable Typeless-style Voice capsule at the lower centre of the display that
-  contains the pointer. It follows display changes, can be moved during a turn, and is independent
-  of the always-on Layer widget.
-- Uses the real acoustic waveform rather than decorative bars. Level, pitch confidence and spectral
-  brightness contribute different visual dimensions while adaptive per-hold normalisation keeps
-  different microphone sources consistent.
-- Gives Final one continuous Listening → Transcribing → Polishing → Delivering → result hand-off.
-  Live returns directly to the current Layer after successful release instead of displaying stages
-  it did not run. External never opens the Voice capsule.
-- Makes rapid transitions interruption-safe: a new hold cannot resurrect stale text, flash the
-  Layer face between Voice stages, resize the card or leave a one-pixel typography jump.
+- 新增可拖动的 Typeless 风格语音卡片，显示在包含光标的屏幕下方中央；随显示器变化，可在录音期间移动，且独立于常驻图层小组件。
+- 使用真实声学波形，而非装饰条。音量、音高置信度和频谱亮度分别影响视觉效果，并按每次按住的录音自适应归一化，使不同麦克风音源观感一致。
+- Final 连贯呈现 Listening → Transcribing → Polishing → Delivering → 结果交接；Live 成功释放后直接返回当前图层，不显示未发生的阶段；External 不打开语音卡片。
+- 快速切换可安全中断：新一轮长按不会复活旧文本、闪现图层面板、改变卡片大小或造成文字跳动。
 
-## More expressive, state-aware feedback
+## 更丰富且反映状态的反馈
 
-- Rebuilds Layer, action, hold, App-recognition and system-control transitions around semantic SF
-  Symbol layers. App Wheel's nine dots now relay into place instead of appearing as one flat image.
-- Presents real volume, mute and brightness state with stable geometry. Repeated adjustment ticks
-  update the existing face without replaying an entrance animation, and stale system samples cannot
-  override a newer rapid press.
-- Synchronises long-press artwork, compact progress and the large HUD to one monotonic clock. A busy
-  UI thread can no longer let Close / Quit artwork lag behind the water-progress stage.
-- Keeps the accepted 0.18-second visual lead while preserving the configured action threshold. The
-  compact status frame and Layer-colour aura stay fixed in size throughout transitions.
+- 使用语义化 SF Symbol 图层，重做图层、动作、长按、应用识别和系统控制动画；App Wheel 的九个圆点会逐个飞入位置。
+- 稳定显示真实音量、静音和亮度状态。连续调整更新现有图标；过期的系统采样不能覆盖较新的按键状态。
+- 长按图案、紧凑进度和大 HUD 共用单调时钟；主线程繁忙时，Close / Quit 图案不会落后于水波进度。
+- 保留 0.18 秒视觉提前量和配置的动作阈值；动画期间小组件边框与图层光晕尺寸不变。
 
-## Configuration and presentation controls
+## 配置与呈现
 
-- Supports up to ten named, coloured Layers in a looping order, with interface icons configurable
-  from JSONC and safe SF Symbol fallbacks. Dynamic volume, brightness, mute and App icons continue
-  to follow measured state automatically.
-- Adds direct keyboard shortcut capture in Layout, including physical left/right modifiers,
-  modifier-only chords, function keys and the `fn` modifier, while retaining manual entry.
-- Adds a floating, transparent presentation remote with live button and touchpad feedback. It can be
-  dragged, corner-resized, switched among three size presets or closed from a right-click menu; its
-  enabled state is shared by Settings, the menu bar and JSONC.
-- Improves Browser Back's staged hold behaviour, per-binding hold delays, Layer 3 system controls,
-  circular scrolling, horizontal scrolling and independent pointer/ring acceleration tuning.
+- 支持最多十个有名称和颜色的图层，可按 JSONC 设置图标并使用安全 SF Symbol 回退；音量、亮度、静音和应用图标继续跟随实测状态。
+- Layout 中可以录入快捷键，保留左右修饰键区别，并支持仅修饰键、功能键和 `fn`。
+- 新增透明悬浮演示遥控器，实时显示按键和触控板操作，可拖动、调整角落尺寸、切换三种大小或通过右键菜单关闭；设置、菜单栏和 JSONC 共用启用状态。
+- 改进浏览器返回的分阶段长按、每个绑定的独立延迟、第三图层系统控制、圆周/横向滚动，以及指针/圆环独立加速度设置。
 
-## Automatic updates begin here
+## 自动更新
 
-- Embeds Sparkle with a pinned dependency checksum, an Ed25519 public key and a signed beta channel.
-  The App checks daily by default, can download quietly, and exposes **Check for Updates…** in both
-  Settings and the menu bar.
-- Automatic updates carry only the app-only ZIP. They do not restart system audio or request an
-  administrator password; Full Setup remains an explicit manual choice for the optional microphone
-  components.
-- Update checks and background downloads are independently controlled by
-  `settings.automaticUpdateChecksEnabled` and
-  `settings.automaticallyDownloadUpdatesEnabled` in `config.jsonc`.
+- 集成 Sparkle、固定依赖校验和、Ed25519 公钥和签名 beta 更新通道。应用默认每日检查，可静默下载，并在设置和菜单栏提供“检查更新…”。
+- 自动更新只包含仅应用 ZIP，不会重启系统音频或请求管理员密码。可选麦克风组件仍需手动选择完整安装。
+- `config.jsonc` 中的 `settings.automaticUpdateChecksEnabled` 和 `settings.automaticallyDownloadUpdatesEnabled` 分别控制更新检查和后台下载。
 
-## API credential storage in this public beta
+## 此公开测试版的 API 凭据存储
 
-Keys can be entered, replaced, tested and removed only from HyperVibe Settings. Certificate-bound
-local builds continue to use the macOS login Keychain. Because this public beta is ad-hoc signed, it
-stores keys as plaintext in a dedicated current-user-only
-`~/Library/Application Support/HyperVibe/Credentials/credentials.json` file. The directory is mode
-`0700`, the file is mode `0600`, and keys never enter the shareable config, App bundle, logs, release
-archives or Git. This prevents accidental disclosure, but it does not defend against malware already
-running as the signed-in macOS user.
+- 密钥只能在 HyperVibe 设置中录入、替换、测试和删除。证书签名的本地构建仍使用 macOS 登录钥匙串；公开测试版因采用 ad-hoc 签名，会将密钥以明文保存在仅当前用户可访问的 `~/Library/Application Support/HyperVibe/Credentials/credentials.json` 中。
+- 目录权限为 `0700`，文件权限为 `0600`。密钥不会进入可共享配置、应用包、日志、发行包或 Git。这可避免意外泄露，但无法抵御以当前 macOS 用户身份运行的恶意软件。
 
-## Verification
+## 验证与下载校验
 
-- SiriRemoteCore passes all 134 tests.
-- The complete packaged App passes all 73 native Voice self-checks, including dictionary safety,
-  streaming deltas, audio conversion, packetisation, prompt constraints, delivery fallback, cue
-  resources and local credential-file lifecycle and permissions.
-- The complete arm64 App, microphone router, HAL plug-in and capture daemon build for macOS 13 or
-  newer. Release audit expands every archive and package, verifies signatures, payload seals,
-  architecture, minimum OS, updater keys, Sparkle and UI-SFX licenses, exact Voice cue resources,
-  public configuration and absence of personal paths, device identifiers and PacketLogger.
+- SiriRemoteCore 的 134 项测试通过；打包后的应用通过 73 项原生 Voice 自检，覆盖词典安全、流式增量、音频转换、分包、提示约束、交付回退、提示音资源和本地凭据文件权限。
+- arm64 应用、麦克风路由器、HAL 插件和采集服务均可在 macOS 13+ 构建。发布审计检查安装包、签名、架构、最低系统版本、更新密钥、许可证、提示音资源和公开配置，并排除个人路径、设备标识及 PacketLogger。
 
-Use the attached `SHA256SUMS.txt` to verify all downloads:
+使用随附的 `SHA256SUMS.txt` 校验下载文件：
 
 ```sh
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-This remains prerelease software. It relies on private macOS frameworks and an undocumented
-Bluetooth voice path; please include the macOS version, remote firmware and relevant logs when
-reporting a reproducible issue.
+这是预发布软件，使用了 macOS 私有框架和未公开的蓝牙语音通道。反馈可复现问题时，请附上 macOS 版本、遥控器固件版本和相关日志。
