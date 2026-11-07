@@ -330,6 +330,7 @@ API 密钥只能通过 HyperVibe 设置输入，不会写入可共享的 `config
 | `action`      | 参数                                  | 说明 |
 |---------------|---------------------------------------|-------|
 | `keystroke`   | `keys`，例如 `"cmd+shift+["` | 修饰键 `cmd/ctrl/opt/shift`（可加 `l`/`r` 前缀区分左右键，如 `rcmd`）；仅含修饰键时会按住并发送组合键；可用字母、数字、方向键、esc/enter/space/tab 和标点 |
+| `chatGPTDictation` | — | 长按开始、松开结束 ChatGPT 听写；只在 ChatGPT 位于前台时生效，并复用同一按键的轻点快捷键 |
 | `media`       | `key` | `playpause/next/previous/volup/voldown/mute` |
 | `mouse`       | `op` | `click/rightclick/move/scroll` |
 | `launch`      | `app` 和/或 `url` | 打开应用或 URL |
@@ -347,14 +348,15 @@ API 密钥只能通过 HyperVibe 设置输入，不会写入可共享的 `config
 | `brightness`  | `value`（0…1） | 设置所有显示器背光；`0` 为最低亮度（电源键可用来调暗） |
 | `brightnessStep` | `to`（`up` / `down`） | 按一个原生硬件按键步进调整亮度 |
 
-**用 Siri 按键控制 ChatGPT 听写：**在 ChatGPT 的 **Settings → Voice → Dictation → Single-tap shortcut** 中设置快捷键。截图中显示的 `^⇧H` 对应 `ctrl+shift+h`；按一次开始听写，再按一次结束。HyperVibe 无法读取 ChatGPT 的私有设置，因此用户需要在 ChatGPT 里设置一次，并在 HyperVibe 的 Siri 按键映射中录入相同组合。将动作设为 `pushToTalk` 后，按住 Siri 超过 0.2 秒会发送第一次快捷键以开始听写；松开 Siri 时再发送一次以结束。快速轻点不会触发这组快捷键。无需 API 密钥，也不需要模拟点击界面控件：
+**用 Siri 按键控制 ChatGPT 听写：**先在 ChatGPT 的 **Settings → Voice → Dictation → Single-tap shortcut** 中设置快捷键。HyperVibe 不读取 ChatGPT 的私有设置；在 HyperVibe 中把 Siri 轻点绑定到相同组合，然后把长按动作设为 `chatGPTDictation`。轻点会照常发送快捷键；ChatGPT 在前台时，长按达到阈值后发送一次以开始听写，松开再发送一次以结束。长按不需要再单独录入快捷键。应用会识别 ChatGPT 前台状态，避免 HyperVibe 自己的语音输入流程与这组快捷键冲突。无需 API 密钥，也不需要模拟点击界面控件：
 
 ```jsonc
-"button.siri": { "action": "pushToTalk", "keys": "ctrl+shift+h" },
+"button.siri":      { "action": "keystroke", "keys": "ctrl+shift+h" },
+"button.siri.hold": { "action": "chatGPTDictation" },
 "button.tv":   { "action": "keystroke", "keys": "enter" }
 ```
 
-快捷键字符串必须与 ChatGPT 中设置的组合完全一致。若改用 ChatGPT 的 **Dictation shortcut**“按住说话”模式，则它需要快捷键保持按下状态，不能使用上面的切换式 `pushToTalk` 配置。
+`button.siri` 的快捷键需与 ChatGPT 中设置的一致。长按只复用此轻点绑定；如果 ChatGPT 不在前台，长按听写动作会忽略，不影响轻点及其他按键。
 
 ### 图层（图层 × 应用）
 
