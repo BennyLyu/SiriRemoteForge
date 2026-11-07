@@ -31,7 +31,7 @@ dist/build/0.2.0-beta.10/
 生成的内容由 Git 忽略，因为个人程序包可能包含私有材料。只上传上面经过审核的四个文件，不要上传整个 `dist/build/` 目录。
 `build-release.sh` 最后会运行 `audit-release.sh`；该脚本会独立解压两个归档，并检查签名/校验和、版本和架构是否正确，以及是否包含 Homebrew 运行时链接、缺少的许可证声明、私有路径、作者配置、PacketLogger 或视频文件等问题。libopus 源码归档和构建输出缓存在 Git 忽略的 `dist/build/` 路径下。构建脚本不会改写 `app/HyperVibe.app`，因此不会影响本地运行的稳定签名开发版和 macOS 隐私授权。
 
-最后一步还会更新并签名仓库根目录的 `appcast.xml`。HyperVibe 默认每天检查 BennyLyu/SiriRemoteForge 的更新源，并可在后台下载仅含应用的 ZIP。每个归档在解压前都会由 Sparkle 使用 Ed25519 公钥验证；公开更新源还会额外进行整体签名。私钥保留在维护者的登录钥匙串中，绝不能提交到仓库。使用 Sparkle 的 `generate_keys -x` 将其备份到加密离线存储；在替换的发布机器上使用 `generate_keys -f` 导入。自动更新只替换 `HyperVibe.app`，不会重启系统音频，也不会要求管理员密码。若用户要安装或更新虚拟麦克风及其特权服务，仍需单独选择“完整安装”。此前从其他发布渠道安装的版本可能仍使用旧更新源，需手动安装一次本 Fork 的版本。
+最后一步还会更新并签名仓库根目录的 `appcast.xml`。HyperVibe 默认每天检查 BennyLyu/SiriRemoteForge 的更新源，并可在后台下载仅含应用的 ZIP。每个归档在解压前都会由 Sparkle 使用 Ed25519 公钥验证；公开更新源还会额外进行整体签名。Fork 使用独立的 Sparkle 账户 `hypervibe-benny-fork`，私钥保留在维护者的登录钥匙串中，绝不能提交到仓库。使用 `generate_keys --account hypervibe-benny-fork -x <加密离线备份路径>` 将其备份到加密离线存储；在替换的发布机器上使用 `generate_keys --account hypervibe-benny-fork -f <备份文件>` 导入。自动更新只替换 `HyperVibe.app`，不会重启系统音频，也不会要求管理员密码。若用户要安装或更新虚拟麦克风及其特权服务，仍需单独选择“完整安装”。此前从其他发布渠道安装的版本可能仍使用旧更新源，需手动安装一次本 Fork 的版本。
 
 ## 公开程序包的安全边界
 

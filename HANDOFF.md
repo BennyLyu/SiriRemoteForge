@@ -24,6 +24,7 @@
 
 - 发布标签：`v0.2.0-beta.10`；目标仓库：`BennyLyu/SiriRemoteForge`。
 - 更新源、Appcast 资产链接和已发布更新校验脚本必须统一指向该 Fork。
+- Fork 的 Sparkle 私钥使用登录钥匙串账户 `hypervibe-benny-fork`；公钥固定在应用 Info.plist 中。私钥须另存加密离线备份，不得提交到 Git。
 - 许可证文件保留原文；不要改写第三方许可条款。
 
 ## 开发与维护约束

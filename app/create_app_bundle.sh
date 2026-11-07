@@ -139,7 +139,7 @@ cat > "${APP_BUNDLE}/Contents/Info.plist" <<EOF
 	<key>SUFeedURL</key>
 	<string>https://raw.githubusercontent.com/BennyLyu/SiriRemoteForge/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
-	<string>soFRqtCkorMRWAPsLRxn3ZE7vaihfpjYFH+4kXmc/Hk=</string>
+	<string>0G7g46mSyVua1AjNcfuRyF3m1z+wH9KgXYefA2C1tGE=</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUAllowsAutomaticUpdates</key>

@@ -20,6 +20,7 @@ done
 
 SPARKLE_ROOT="$(app/prepare_sparkle.sh)"
 SIGN_UPDATE="$SPARKLE_ROOT/bin/sign_update"
+SPARKLE_ACCOUNT="${HYPERVIBE_SPARKLE_ACCOUNT:-hypervibe-benny-fork}"
 if [ -n "${HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE:-}" ]; then
     [ -f "$HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE" ] || {
         echo "Sparkle private-key file not found" >&2
@@ -28,9 +29,10 @@ if [ -n "${HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE:-}" ]; then
 fi
 run_sign_update() {
     if [ -n "${HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE:-}" ]; then
-        "$SIGN_UPDATE" --ed-key-file "$HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE" "$@"
+        "$SIGN_UPDATE" --account "$SPARKLE_ACCOUNT" \
+            --ed-key-file "$HYPERVIBE_SPARKLE_PRIVATE_KEY_FILE" "$@"
     else
-        "$SIGN_UPDATE" "$@"
+        "$SIGN_UPDATE" --account "$SPARKLE_ACCOUNT" "$@"
     fi
 }
 SIGNATURE="$(run_sign_update -p "$ARCHIVE")"

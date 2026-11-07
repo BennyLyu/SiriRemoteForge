@@ -42,7 +42,8 @@ EXPECTED_URL="https://github.com/BennyLyu/SiriRemoteForge/releases/download/v$VE
 
 SPARKLE_ROOT="$(app/prepare_sparkle.sh)"
 SIGN_UPDATE="$SPARKLE_ROOT/bin/sign_update"
-"$SIGN_UPDATE" --verify "$APPCAST"
+SPARKLE_ACCOUNT="${HYPERVIBE_SPARKLE_ACCOUNT:-hypervibe-benny-fork}"
+"$SIGN_UPDATE" --account "$SPARKLE_ACCOUNT" --verify "$APPCAST"
 /usr/bin/xmllint --noout "$APPCAST"
 
 ITEM="//*[local-name()='item'][*[local-name()='shortVersionString' and normalize-space(text())='$VERSION']]"
@@ -75,7 +76,7 @@ ACTUAL_LENGTH="$(/usr/bin/stat -f '%z' "$ARCHIVE")"
     echo "download length mismatch: $ACTUAL_LENGTH != $LENGTH" >&2
     exit 1
 }
-"$SIGN_UPDATE" --verify "$ARCHIVE" "$SIGNATURE"
+"$SIGN_UPDATE" --account "$SPARKLE_ACCOUNT" --verify "$ARCHIVE" "$SIGNATURE"
 
 /bin/mkdir -p "$VERIFY_ROOT/extracted"
 /usr/bin/ditto -x -k "$ARCHIVE" "$VERIFY_ROOT/extracted"
