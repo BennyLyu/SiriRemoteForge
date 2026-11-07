@@ -635,7 +635,11 @@ struct LayoutView: View {
 
     private var sortedModeNames: [String] { config.modes.keys.sorted() }
 
-    private struct Slot { let slotKey: String; let label: String }
+    private struct Slot {
+        let slotKey: String
+        let label: String
+        var help: String? = nil
+    }
     private func slots(for base: String) -> [Slot] {
         if base.hasPrefix("ring.") || base.hasPrefix("button.") {
             return [
@@ -645,9 +649,12 @@ struct LayoutView: View {
                 // no longer fire on its own press, because a third tap may still be coming. Nothing
                 // else is affected, and the plain tap is never delayed by either.
                 Slot(slotKey: base + ".triple", label: L("Triple-tap")),
-                Slot(slotKey: base + ".hold",   label: L("Hold")),
-                Slot(slotKey: base + ".hold2",  label: L("Hold ··")),
-                Slot(slotKey: base + ".hold3",  label: L("Hold ···")),
+                Slot(slotKey: base + ".hold", label: L("Long hold · stage 1"),
+                     help: "First long-press slot (.hold). The action runs when you release after this stage is reached."),
+                Slot(slotKey: base + ".hold2", label: L("Long hold · stage 2"),
+                     help: "Second long-press slot (.hold2). Timing follows this binding's after value or the Tuning threshold. Release to run the deepest stage reached."),
+                Slot(slotKey: base + ".hold3", label: L("Long hold · stage 3"),
+                     help: "Third long-press slot (.hold3). Timing follows this binding's after value or the Tuning threshold. Release to run the deepest stage reached."),
             ]
         }
         // Swipes / two-finger tap are one-shot gesture events — a single action, no hold/double.
@@ -699,7 +706,9 @@ struct LayoutView: View {
                     if idx > 0 { Divider() }
                     HStack(spacing: 12) {
                         Text(slot.label).font(.system(size: 13, weight: .medium))
-                            .frame(width: 92, alignment: .leading)
+                            .lineLimit(1).minimumScaleFactor(0.85)
+                            .frame(width: 140, alignment: .leading)
+                            .help(slot.help.map { L($0) } ?? "")
                         ActionSlotEditor(
                             action: config.modes[mode]?.bindings[keyFor(slot.slotKey)],
                             modeNames: sortedModeNames,
