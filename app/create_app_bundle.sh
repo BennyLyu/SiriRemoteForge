@@ -137,7 +137,7 @@ cat > "${APP_BUNDLE}/Contents/Info.plist" <<EOF
 	<!-- Sparkle update policy. Runtime choices are mirrored from config.jsonc; these values provide
 	     secure first-launch defaults before that config has been migrated by the GUI. -->
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/HOLODATA-COM/SiriRemoteForge/main/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/BennyLyu/SiriRemoteForge/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>soFRqtCkorMRWAPsLRxn3ZE7vaihfpjYFH+4kXmc/Hk=</string>
 	<key>SUEnableAutomaticChecks</key>

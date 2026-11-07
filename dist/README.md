@@ -8,28 +8,30 @@
 
 `SHA256SUMS.txt` 列出原生安装器及两个归档文件的校验和。GitHub 会另外提供源码归档。
 
+发布前同时更新 `README.md` 与 `dist/release-notes-vVERSION.md` 中的用户说明；尤其确认新版本的 `SUFeedURL`、Appcast 下载链接和发布校验脚本全部指向 BennyLyu/SiriRemoteForge。旧渠道安装包不会自动切换更新源，发布说明需提醒用户手动安装一次 Fork 版本。
+
 ## 构建公开 Release 资源
 
 本机构建只需要安装 Xcode 命令行工具。构建脚本会下载带固定校验和的官方 libopus 1.6.1 源码，将其编译为 macOS 13 目标版本，并静态链接进发布路由器。构建机和目标 Mac 都不需要 Homebrew。
 
 ```sh
-dist/build-release.sh 0.1.0-beta.1
+dist/build-release.sh 0.2.0-beta.10
 ```
 
 命令要求工作区干净，会重新构建所有发布二进制，写入数字形式的应用版本和单调递增的内部构建号，并在隔离的暂存程序包中执行可重复的临时签名；随后运行路由器和 HAL 离线测试，并生成：
 
 ```text
-dist/build/0.1.0-beta.1/
-├── HyperVibe-0.1.0-beta.1-macOS-arm64.zip
-├── HyperVibe-Full-Setup-0.1.0-beta.1-arm64.zip
-├── HyperVibe-Full-Setup-0.1.0-beta.1-arm64.pkg
+dist/build/0.2.0-beta.10/
+├── HyperVibe-0.2.0-beta.10-macOS-arm64.zip
+├── HyperVibe-Full-Setup-0.2.0-beta.10-arm64.zip
+├── HyperVibe-Full-Setup-0.2.0-beta.10-arm64.pkg
 └── SHA256SUMS.txt
 ```
 
 生成的内容由 Git 忽略，因为个人程序包可能包含私有材料。只上传上面经过审核的四个文件，不要上传整个 `dist/build/` 目录。
 `build-release.sh` 最后会运行 `audit-release.sh`；该脚本会独立解压两个归档，并检查签名/校验和、版本和架构是否正确，以及是否包含 Homebrew 运行时链接、缺少的许可证声明、私有路径、作者配置、PacketLogger 或视频文件等问题。libopus 源码归档和构建输出缓存在 Git 忽略的 `dist/build/` 路径下。构建脚本不会改写 `app/HyperVibe.app`，因此不会影响本地运行的稳定签名开发版和 macOS 隐私授权。
 
-最后一步还会更新并签名仓库根目录的 `appcast.xml`。HyperVibe 默认每天检查该更新源，并可在后台下载仅含应用的 ZIP。每个归档在解压前都会由 Sparkle 使用 Ed25519 公钥验证；公开更新源还会额外进行整体签名。私钥保留在维护者的登录钥匙串中，绝不能提交到仓库。使用 Sparkle 的 `generate_keys -x` 将其备份到加密离线存储；在替换的发布机器上使用 `generate_keys -f` 导入。自动更新只替换 `HyperVibe.app`，不会重启系统音频，也不会要求管理员密码。若用户要安装或更新虚拟麦克风及其特权服务，仍需单独选择“完整安装”。
+最后一步还会更新并签名仓库根目录的 `appcast.xml`。HyperVibe 默认每天检查 BennyLyu/SiriRemoteForge 的更新源，并可在后台下载仅含应用的 ZIP。每个归档在解压前都会由 Sparkle 使用 Ed25519 公钥验证；公开更新源还会额外进行整体签名。私钥保留在维护者的登录钥匙串中，绝不能提交到仓库。使用 Sparkle 的 `generate_keys -x` 将其备份到加密离线存储；在替换的发布机器上使用 `generate_keys -f` 导入。自动更新只替换 `HyperVibe.app`，不会重启系统音频，也不会要求管理员密码。若用户要安装或更新虚拟麦克风及其特权服务，仍需单独选择“完整安装”。此前从其他发布渠道安装的版本可能仍使用旧更新源，需手动安装一次本 Fork 的版本。
 
 ## 公开程序包的安全边界
 

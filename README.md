@@ -95,7 +95,7 @@ flowchart LR
 
 ## 安装 Beta 版本
 
-在 [Releases 页面](https://github.com/HOLODATA-COM/SiriRemoteForge/releases) 发布的 Beta 版本提供三个 Apple 芯片下载包：
+在 [Releases 页面](https://github.com/BennyLyu/SiriRemoteForge/releases) 发布的 Beta 版本提供三个 Apple 芯片下载包：
 
 - **原生完整安装器（推荐）**——打开 `HyperVibe-Full-Setup-…-arm64.pkg`。标准 macOS 安装器会在一次管理员授权后安装应用、Siri Remote Mic 系统组件、后台服务和卸载器。随后 HyperVibe 会打开实时系统检查页面，供用户选择 macOS 不允许安装器代为决定的隐私权限。
 - **仅安装应用**——解压 `HyperVibe-…-macOS-arm64.zip`，将 `HyperVibe.app` 移至“应用程序”，然后首次打开时右键并选择**打开**。
@@ -132,6 +132,8 @@ macOS 会限制应用所需的底层访问权限。首次运行时，HyperVibe �
 ### 软件更新
 
 HyperVibe 默认每天检查 Release 更新源。它可以在后台下载较新的**仅应用**归档；用户也可从设置或菜单栏选择**检查更新…**。Sparkle 会在解压前使用嵌入应用的 Ed25519 公钥验证每个归档。更新器只替换 `HyperVibe.app`，因此普通更新无需重启系统音频，也不会要求管理员密码。“完整安装”仍需单独手动下载，用于安装或刷新虚拟麦克风组件。
+
+本 Fork 的 Beta 安装包会检查 BennyLyu/SiriRemoteForge 的更新源。此前从其他发布渠道安装的版本可能仍指向原更新源；请先从本仓库 Releases 手动安装一次新版本，之后即可使用应用内检查更新。
 
 这两项行为由 `config.jsonc` 中的 `settings.automaticUpdateChecksEnabled` 和 `settings.automaticallyDownloadUpdatesEnabled` 控制，默认都为 `true`。
 
@@ -384,6 +386,8 @@ API 密钥只能通过 HyperVibe 设置输入，不会写入可共享的 `config
 ### 常驻状态小组件
 
 状态小组件默认开启。可在**设置 → Tuning → 屏幕状态**中关闭，或设置 `"statusWidgetEnabled": false`。精简浮动卡片平时显示当前图层，操作完成后短暂显示实际执行的操作。激活应用时显示应用真实图标；媒体、导航、鼠标、语音和窗口操作显示对应符号，也可使用绑定中的自定义 `label` / `icon`。随后自动返回当前图层。
+
+也可从菜单栏菜单切换**显示层级**，临时隐藏或重新显示常驻层级状态卡。ChatGPT 听写长按期间，若 ChatGPT 是按下时的前台应用，层级状态卡和长按提示会自动隐藏，松开遥控器后恢复；如果 ChatGPT 不在前台，提示仍会显示。
 
 小组件显示时长会随实际手势变化：短按约显示 0.7 秒，双击/三击会稍长。松开选择式长按在 0.18 秒时开始视觉预览：两层液态表面铺过整个圆角卡片，细微的卡片形波纹随之扩散。图标和文字始终浮在液面上方，并根据长按状态调整对比度。只有到达实际配置的阶段阈值时，操作界面才会切换；最后一层液面会一直保留到松开按键。若在 0.18 秒前松开，预览会完全取消；预览开始后、第一阶段阈值前松开，仍按普通轻点执行并显示确认。因此，卡片只呈现进度，不会变成另一套手势识别器。
 
